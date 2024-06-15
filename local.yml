@@ -9,7 +9,11 @@
       name:
         - htop
         - tmux
-
+        
+  - name: Install bottle python package
+    ansible.builtin.pip:
+    name: psutil
+    
   - name: copy wallpaper file
     copy:
       src: files/wallpaper.png
