@@ -50,6 +50,14 @@
       group: root
       mode: 0440
 
+  - name: set up sudo for ansible user
+    copy:
+      src: files/sudoer_librevlad
+      dest: /etc/sudoers.d/librevlad
+      owner: root
+      group: root
+      mode: 0440
+
         #  - name: add ansible-pull cron job
         #cron:
         #name: ansible auto-provision
