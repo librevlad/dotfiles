@@ -48,29 +48,10 @@
         - plocate
         - mysql-client
         - nmap
-    
-  - name: copy wallpaper file
-    copy:
-      src: files/wallpaper.png
-      dest: /usr/share/backgrounds/ansible-wallpaper.png
-      owner: root
-      group: root
-
-  - name: set wallpaper
-    become_user: librevlad
-    dconf:
-      key: "/org/gnome/desktop/background/picture-uri"
-      value: "'file:///usr/share/backgrounds/ansible-wallpaper.png'"
-
-  - name: set wallpaper position
-    become_user: librevlad
-    dconf:
-      key: "/org/gnome/desktop/background/picture-options"
-      value: "'zoom'"
 
   - name: copy .bashrc file
     copy:
-     src: files/bashrc
+     src: ../files/bashrc
      dest: /home/librevlad/.bashrc
      owner: librevlad
      group: librevlad
@@ -82,7 +63,7 @@
 
   - name: set up sudo for ansible user
     copy:
-      src: files/sudoer_velociraptor
+      src: ../files/sudoer_velociraptor
       dest: /etc/sudoers.d/velociraptor
       owner: root
       group: root
@@ -90,7 +71,7 @@
 
   - name: set up sudo for ansible user
     copy:
-      src: files/sudoer_librevlad
+      src: ../files/sudoer_librevlad
       dest: /etc/sudoers.d/librevlad
       owner: root
       group: root

@@ -7,6 +7,8 @@
   
 - name: Configure server
   import_tasks: roles/linux-base/tasks/main.yml
+  
+  
 
         #  - name: add ansible-pull cron job
         #cron:
