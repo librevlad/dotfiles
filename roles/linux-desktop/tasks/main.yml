@@ -1,8 +1,5 @@
 ---
-- name: Add starws-box/deadbeef-player
-  ansible.builtin.apt_repository:
-    repo: ppa:starws-box/deadbeef-player
-    
+
 - name: Install Chrome
   include_role:
     name: darkwizard242.googlechrome
@@ -34,8 +31,7 @@
       - terminator 
       - rofi 
       - vlc 
-      - totem 
-      - deadbeef 
+      - totem
       - rhythmbox 
       - kdenlive 
       - audacity 
