@@ -5,10 +5,10 @@
 
   tasks:
   - name: Add php repository from PPA and install its signing key on Ubuntu target
-  ansible.builtin.apt_repository:
-    repo: ppa:ondrej/php
+    ansible.builtin.apt_repository:
+      repo: ppa:ondrej/php
     
-  - name: install musthave software
+  - name: install packages
     package:
       name:
         - htop
