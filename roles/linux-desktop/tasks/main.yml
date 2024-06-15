@@ -1,5 +1,4 @@
 ---
-
 - name: Install Chrome
   include_role:
     name: darkwizard242.googlechrome
@@ -52,12 +51,11 @@
       - xclip 
       - xsel 
       - gparted 
-      - kodi 
+      - kodi
+      - kodi-addons-dev 
       - breeze 
       - breeze-gtk-theme 
       - breeze-icon-theme 
-      - byobu speedtest-cli 
-      - kodi-addons-dev shutter 
       - fonts-firacode 
       - pcmanfm 
       - feh 

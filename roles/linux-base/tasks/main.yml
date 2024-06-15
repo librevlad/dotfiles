@@ -19,6 +19,7 @@
       - fish
       - fzf
       - vim
+      - byobu
       - php8.3
       - php8.3-common
       - php8.3-mysql
