@@ -3,10 +3,9 @@
   connection: local
   become: true
 
-  tasks:
-  
-- name: Configure server
-  import_tasks: roles/linux-base/tasks/main.yml
+  roles:
+  - linux-base
+  - linux-desktop
   
   
 

@@ -1,25 +1,19 @@
 ---
-- hosts: localhost
-  become: yes
-  tasks:
-  - name: Configure server
-    import_tasks: ../../linux-base/tasks/main.yml
-  
-  - name: copy wallpaper file
-    copy:
-      src: ../files/wallpaper.png
-      dest: /usr/share/backgrounds/ansible-wallpaper.png
-      owner: root
-      group: root
+- name: copy wallpaper file
+  copy:
+    src: ../files/wallpaper.png
+    dest: /usr/share/backgrounds/ansible-wallpaper.png
+    owner: root
+    group: root
+    
+- name: set wallpaper
+  become_user: librevlad
+  dconf:
+    key: "/org/gnome/desktop/background/picture-uri"
+    value: "'file:///usr/share/backgrounds/ansible-wallpaper.png'"
 
-  - name: set wallpaper
-    become_user: librevlad
-    dconf:
-      key: "/org/gnome/desktop/background/picture-uri"
-      value: "'file:///usr/share/backgrounds/ansible-wallpaper.png'"
-
-  - name: set wallpaper position
-    become_user: librevlad
-    dconf:
-      key: "/org/gnome/desktop/background/picture-options"
-      value: "'zoom'"
+- name: set wallpaper position
+  become_user: librevlad
+  dconf:
+    key: "/org/gnome/desktop/background/picture-options"
+    value: "'zoom'"
