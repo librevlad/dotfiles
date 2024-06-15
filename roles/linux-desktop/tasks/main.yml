@@ -10,7 +10,7 @@
 
 - name: Clone CS
   ansible.builtin.git:
-    repo: 'https://github.com/exfriend/ddev-workout-phpstorm-code-style.git'
+    repo: 'https://github.com/exfriend/dev-workout-phpstorm-code-style.git'
     dest: /opt/dev-workout-phpstorm-code-style
 
 - name: Add GitTools
