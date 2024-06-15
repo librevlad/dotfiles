@@ -26,7 +26,6 @@
 - name: install packages
   package:
     name:
-      - i3-gaps 
       - i3lock 
       - terminator 
       - rofi 
