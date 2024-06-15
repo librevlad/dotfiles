@@ -26,7 +26,8 @@
         - fzf
         - vim
         - php8.3
-        - php8.3-common php8.3-mysql
+        - php8.3-common
+        - php8.3-mysql
         - php8.3-xml
         - php8.1-xmlrpc
         - php8.3-curl
