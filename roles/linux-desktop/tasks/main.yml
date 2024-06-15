@@ -2,7 +2,57 @@
 - name: Install Chrome
   include_role:
     name: darkwizard242.googlechrome
-  
+
+- name: Clone theme
+  ansible.builtin.git:
+    repo: 'https://github.com/exfriend/dev-workout-phpstorm-theme.git'
+    dest: /opt/dev-workout-phpstorm-theme
+
+- name: Clone CS
+  ansible.builtin.git:
+    repo: 'https://github.com/exfriend/ddev-workout-phpstorm-code-style.git'
+    dest: /opt/dev-workout-phpstorm-code-style
+
+- name: Add GitTools
+  ansible.builtin.git:
+    repo: 'https://github.com/internetwache/GitTools.git'
+    dest: /opt/gittools
+
+- name: Add Sublister
+  ansible.builtin.git:
+    repo: 'https://github.com/aboul3la/Sublist3r.git'
+    dest: /opt/sublister
+
+- name: setup inotify
+  copy:
+    src: ../files/sysctl_idea.conf
+    dest: /etc/sysctl.d/idea.conf
+
+- name: Apply inotify
+  ansible.builtin.shell:
+    cmd: sudo sysctl -p --system
+
+- name: copy terminator
+  copy:
+    src: ../files/terminator
+    dest: /home/librevlad/.config/terminator
+    owner: librevlad
+    group: librevlad
+
+- name: copy i3
+  copy:
+    src: ../files/i3
+    dest: /home/librevlad/.config/i3
+    owner: librevlad
+    group: librevlad
+
+- name: copy xresources
+  copy:
+    src: ../files/xorg/Xresources
+    dest: /home/librevlad/.Xresources
+    owner: librevlad
+    group: librevlad
+
 - name: wallpaper file
   copy:
     src: ../files/wallpaper.png

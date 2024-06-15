@@ -9,7 +9,7 @@
   ansible.builtin.apt:
     update_cache: yes
     cache_valid_time: 3600
- 
+
 - name: Add ondrej ppa
   ansible.builtin.apt_repository:
     repo: ppa:ondrej/php
@@ -57,12 +57,39 @@
       - mysql-client
       - nmap
 
+# Copy dotfiles
+
 - name: copy .bashrc file
   copy:
     src: ../files/bashrc
     dest: /home/librevlad/.bashrc
     owner: librevlad
     group: librevlad
+
+- name: copy .vim
+  copy:
+    src: ../files/vim
+    dest: /home/librevlad/.vim
+    owner: librevlad
+    group: librevlad
+
+- name: copy .vimrc
+  copy:
+    src: ../files/vim/vimrc
+    dest: /home/librevlad/.ideavimrc
+    owner: librevlad
+    group: librevlad
+
+- name: copy fish
+  copy:
+    src: ../files/fish
+    dest: /home/librevlad/.config/fish
+    owner: librevlad
+    group: librevlad
+
+- name: Apply fish
+  ansible.builtin.shell:
+    cmd: sudo chsh fish librevlad
 
 - name: copy .gitconfig file
   copy:
