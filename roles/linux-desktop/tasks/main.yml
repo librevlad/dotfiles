@@ -2,7 +2,6 @@
 - hosts: localhost
   become: yes
   tasks:
-  
   - name: Configure server
     import_tasks: ../../linux-base/tasks/main.yml
   
