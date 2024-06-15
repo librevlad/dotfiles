@@ -1,12 +1,19 @@
+- name: Create /work directory if it does not exist
+  ansible.builtin.file:
+    path: /work
+    state: directory
+    mode: '0777'
+    owner: librevlad
+
 - name: Only run "update_cache=yes" if the last one is more than 3600 seconds ago
   ansible.builtin.apt:
     update_cache: yes
     cache_valid_time: 3600
-  
+ 
 - name: Add ondrej ppa
   ansible.builtin.apt_repository:
     repo: ppa:ondrej/php
-    
+
 - name: install packages
   package:
     name:
@@ -52,16 +59,23 @@
 
 - name: copy .bashrc file
   copy:
-   src: ../files/bashrc
-   dest: /home/librevlad/.bashrc
-   owner: librevlad
-   group: librevlad
-   
+    src: ../files/bashrc
+    dest: /home/librevlad/.bashrc
+    owner: librevlad
+    group: librevlad
+
+- name: copy .gitconfig file
+  copy:
+    src: ../files/gitconfig
+    dest: /home/librevlad/.gitconfig
+    owner: librevlad
+    group: librevlad
+
 - name: add ansible user
   user:
     name: velociraptor
     system: yes
- 
+
 - name: set up sudo for ansible user
   copy:
     src: ../files/sudoer_velociraptor

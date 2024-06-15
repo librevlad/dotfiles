@@ -1,0 +1,24 @@
+snippet pubf "public function" b
+public function $1($2)
+{
+		$0
+}
+endsnippet
+
+snippet belot "Belongs To" b
+public function $1()
+{
+		return $this->belongsTo('${2:${1/\w+\s*/\u$0/ig}}');
+}
+
+$0
+endsnippet
+
+snippet hasm "Has many"	b
+public function $1s()
+{
+		return $this->hasMany('App\\${1/\w+\s*/\u$0/ig}');
+}
+
+$0
+endsnippet

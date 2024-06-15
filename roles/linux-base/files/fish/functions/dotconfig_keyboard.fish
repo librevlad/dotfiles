@@ -1,0 +1,3 @@
+function dotconfig_keyboard
+	roccatskeltrconfig
+end

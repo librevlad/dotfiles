@@ -1,0 +1,16 @@
+snippet textfield "Bootstrap 3 text field" b
+<div class="form-group">
+    <label for="$1">${1/\w+\s*/\u$0/ig}</label>
+    <input type="${2:text}" class="form-control" id="$1" name="$1" placeholder="${1/\w+\s*/\u$0/ig}">
+</div>
+$0
+endsnippet
+
+
+snippet tf "Bootstrap 3 text field" b
+<div class="form-group">
+    <label for="$1">${1/\w+\s*/\u$0/ig}</label>
+    <input type="${2:text}" class="form-control" id="$1" name="$1" placeholder="${1/\w+\s*/\u$0/ig}">
+</div>
+$0
+endsnippet

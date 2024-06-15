@@ -1,0 +1,55 @@
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'VundleVim/Vundle.vim'
+
+" snippets common
+Plugin 'honza/vim-snippets'
+
+" ultisnips
+Plugin 'SirVer/ultisnips'
+
+" snipmate
+"Plugin 'MarcWeber/vim-addon-mw-utils'
+"Plugin 'tomtom/tlib_vim'
+"Plugin 'garbas/vim-snipmate'
+
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdTree'
+Plugin 'jwalton512/vim-blade'
+Plugin 'easymotion/vim-easymotion'
+Plugin 'tmhedberg/matchit'
+Plugin 'tpope/vim-surround'
+Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}   
+Plugin 'Chiel92/vim-autoformat'
+
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'arnaud-lb/vim-php-namespace'
+" completion
+"Plugin 'mkusher/padawan.vim'
+Plugin 'ervandew/supertab'
+
+" themes
+Bundle 'gosukiwi/vim-atom-dark'
+
+call vundle#end()            " required
+
+filetype plugin indent on    " required
+let mapleader = ","
+
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+au FileType php set omnifunc=padawan#Complete
+
+" my own preferences
+source ~/.vim/settings/basic.vim
+source ~/.vim/settings/mappings.vim
+source ~/.vim/settings/appearance.vim
+source ~/.vim/settings/plugins.vim
+
+set clipboard+=ideaput

@@ -1,0 +1,41 @@
+[global_config]
+  handle_size = 1
+  geometry_hinting = True
+  enabled_plugins = TerminalShot, LaunchpadCodeURLHandler, APTURLHandler, LaunchpadBugURLHandler
+  suppress_multiple_term_dialog = True
+  title_use_system_font = False
+  title_font = Sans 12
+[keybindings]
+  broadcast_all = <Primary><Alt>Scroll_Lock
+[profiles]
+  [[default]]
+    icon_bell = False
+    background_color = "#2d323d"
+    cursor_color = "#566576"
+    font = Fira Code Medium 14
+    foreground_color = "#eeeeec"
+    show_titlebar = False
+    scrollbar_position = hidden
+    scrollback_lines = 5000
+    scrollback_infinite = True
+    use_system_font = False
+    copy_on_selection = True
+  [[transparent]]
+    background_darkness = 0.0
+    background_type = transparent
+    cursor_color = "#aaaaaa"
+    font = Monospace 10
+    foreground_color = "#ffffff"
+    show_titlebar = False
+    scrollbar_position = hidden
+    use_system_font = False
+[layouts]
+  [[default]]
+    [[[child1]]]
+      parent = window0
+      profile = default
+      type = Terminal
+    [[[window0]]]
+      parent = ""
+      type = Window
+[plugins]

@@ -1,0 +1,1 @@
+/home/exfriend/.fzf/shell/key-bindings.fish

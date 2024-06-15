@@ -1,0 +1,317 @@
+# ---------------------------------------------------------------
+# i3 config
+# ---------------------------------------------------------------
+
+set $mod Mod4
+for_window [class="^.*"] border pixel 0
+
+# only for i3-gaps
+gaps inner 20
+
+# ---------------------------------------------------------------
+# Platform-dependant variables
+# ---------------------------------------------------------------
+
+set $tvMoni HDMI-1-1
+set $centralMoni HDMI-0
+set $rightMoni HDMI-1-2
+set $leftMoni DP-1-1
+
+
+# ---------------------------------------------------------------
+# Workspaces
+# ---------------------------------------------------------------
+
+
+set $w_browser " 1 "
+set $w_ide " 2 "
+set $w_term " 3 "
+set $w_music " 4 "
+set $w_chat " 5 "
+set $w_files " 6 "
+set $w_seven " 7 "
+set $w_eight " 8 "
+set $w_nine " 9 "
+set $w_ten " 0 "
+
+set $w_rightMoni1 " R1 "
+set $w_rightMoni2 " R2 "
+
+set $w_leftMoni1 " L1 "
+set $w_leftMoni2 " L2 "
+
+set $w_tvMoni1 " TV1 "
+set $w_tvMoni2 " TV2 "
+set $w_tvMoni3 " TV3 "
+set $w_tvMoni4 " TV4 "
+set $w_tvMoni5 " TV5 "
+set $w_tvMoni6 " TV6 "
+set $w_tvMoni7 " TV7 "
+set $w_tvMoni8 " TV8 "
+set $w_tvMoni9 " TV9 "
+set $w_tvMoni0 " TV0 "
+
+
+# ---------------------------------------------------------------
+# Workspace to monitor bindings
+# ---------------------------------------------------------------
+
+
+workspace $w_browser output $centralMoni
+workspace $w_ide output $centralMoni
+workspace $w_term output $centralMoni
+workspace $w_music output $centralMoni
+workspace $w_chat output $centralMoni
+workspace $w_files output $centralMoni
+
+workspace $w_seven output $centralMoni
+workspace $w_eight output $centralMoni
+workspace $w_nine output $centralMoni
+workspace $w_ten output $centralMoni
+
+workspace $w_leftMoni1 output $leftMoni
+workspace $w_leftMoni2 output $leftMoni
+
+workspace $w_rightMoni1 output $rightMoni
+workspace $w_rightMoni2 output $rightMoni
+
+workspace $w_tvMoni1 output $tvMoni
+workspace $w_tvMoni2 output $tvMoni
+workspace $w_tvMoni3 output $tvMoni
+workspace $w_tvMoni4 output $tvMoni
+workspace $w_tvMoni5 output $tvMoni
+workspace $w_tvMoni6 output $tvMoni
+workspace $w_tvMoni7 output $tvMoni
+workspace $w_tvMoni8 output $tvMoni
+workspace $w_tvMoni9 output $tvMoni
+workspace $w_tvMoni0 output $tvMoni
+
+
+# ---------------------------------------------------------------
+# Workspace adjustments
+# ---------------------------------------------------------------
+
+
+workspace_auto_back_and_forth yes
+assign [class="jetbrains-phpstorm"] $w_ide
+
+
+# ---------------------------------------------------------------
+# Autostart
+# ---------------------------------------------------------------
+
+
+exec --no-startup-id nm-applet
+exec pulseaudio --start
+exec pulseaudio --start
+exec xset -dpms s off
+exec setxkbmap -option grp:alt_shift_toggle "us,ru" -option grp_led:caps
+exec_always ~/.screenlayout/current.sh
+exec_always ~/dotfiles/software/bin/kbfix.sh
+exec_always ~/dotfiles/software/bin/wallpaper.sh
+exec --no-startup-id "compton --config ~/dotfiles/software/gui/compton/compton.conf"
+
+
+# ---------------------------------------------------------------
+# Look and Feel
+# ---------------------------------------------------------------
+
+
+client.focused            #404040 #2d323d #ffffff #336699
+client.focused_inactive   #404040 #2d323d #888888 #484e50
+client.unfocused          #404040 #2d323d #888888 #484e50
+
+
+# ---------------------------------------------------------------
+# Keybindings
+# ---------------------------------------------------------------
+
+
+# Pulse Audio controls
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+# Media player controls
+#bindsym XF86AudioPlay exec rhythmbox-client --play-pause
+#bindsym XF86AudioPause exec rhythmbox-client --pause
+#bindsym XF86AudioNext exec rhythmbox-client --next
+#bindsym XF86AudioPrev exec rhythmbox-client --previous
+
+# Sreen brightness controls
+bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen
+bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen
+bindsym XF86Calculator exec gnome-calculator
+
+
+font pango:Fira Code Medium 15
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# start a terminal
+bindsym $mod+Return exec terminator
+
+# kill focused window
+bindsym $mod+c kill
+
+bindsym $mod+s exec rofi -show run
+bindsym $mod+t exec ~/dotfiles/software/bin/lock.sh
+
+
+# change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+bindsym $mod+Mod1+h move left
+bindsym $mod+Mod1+j move down
+bindsym $mod+Mod1+k move up
+bindsym $mod+Mod1+l move right
+
+# split in horizontal orientation
+bindsym $mod+b split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen
+
+# change container layout (stacked, tabbed, toggle split)
+#bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+y layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+#bindsym $mod+space focus mode_toggle
+
+# focus the parent container
+#bindsym $mod+a focus parent
+
+# focus the child container
+#bindsym $mod+d focus child
+
+# switch to workspace
+
+
+bindsym $mod+Mod1+1 workspace $w_tvMoni1
+bindsym $mod+Mod1+2 workspace $w_tvMoni2
+bindsym $mod+Mod1+3 workspace $w_tvMoni3
+bindsym $mod+Mod1+4 workspace $w_tvMoni4
+bindsym $mod+Mod1+5 workspace $w_tvMoni5
+bindsym $mod+Mod1+6 workspace $w_tvMoni6
+bindsym $mod+Mod1+7 workspace $w_tvMoni7
+bindsym $mod+Mod1+8 workspace $w_tvMoni8
+bindsym $mod+Mod1+9 workspace $w_tvMoni9
+bindsym $mod+Mod1+0 workspace $w_tvMoni0
+
+
+bindsym $mod+1 workspace $w_browser
+bindsym $mod+2 workspace $w_ide
+bindsym $mod+3 workspace $w_term
+bindsym $mod+4 workspace $w_music
+bindsym $mod+5 workspace $w_chat
+bindsym $mod+6 workspace $w_files
+bindsym $mod+7 workspace $w_seven
+bindsym $mod+8 workspace $w_eight
+bindsym $mod+9 workspace $w_nine
+bindsym $mod+0 workspace $w_ten
+
+bindsym $mod+Q workspace $w_leftMoni1
+bindsym $mod+A workspace $w_leftMoni2
+
+bindsym $mod+E workspace $w_rightMoni1
+bindsym $mod+D workspace $w_rightMoni2
+
+
+bindsym $mod+shift+o workspace prev_on_output
+bindsym $mod+shift+p workspace next_on_output
+
+#bindsym $mod+* focus output left
+#bindsym $mod+/ focus output right
+
+
+# move focused container to workspace
+
+bindsym $mod+Mod1+Shift+1 move container to workspace $w_tvMoni1
+bindsym $mod+Mod1+Shift+2 move container to workspace $w_tvMoni2
+bindsym $mod+Mod1+Shift+3 move container to workspace $w_tvMoni3
+bindsym $mod+Mod1+Shift+4 move container to workspace $w_tvMoni4
+bindsym $mod+Mod1+Shift+5 move container to workspace $w_tvMoni5
+bindsym $mod+Mod1+Shift+6 move container to workspace $w_tvMoni6
+bindsym $mod+Mod1+Shift+7 move container to workspace $w_tvMoni7
+bindsym $mod+Mod1+Shift+8 move container to workspace $w_tvMoni8
+bindsym $mod+Mod1+Shift+9 move container to workspace $w_tvMoni9
+bindsym $mod+Mod1+Shift+0 move container to workspace $w_tvMoni0
+
+bindsym $mod+Shift+1 move container to workspace $w_browser
+bindsym $mod+Shift+2 move container to workspace $w_ide
+bindsym $mod+Shift+3 move container to workspace $w_term
+bindsym $mod+Shift+4 move container to workspace $w_music
+bindsym $mod+Shift+5 move container to workspace $w_chat
+bindsym $mod+Shift+6 move container to workspace $w_files
+bindsym $mod+Shift+7 move container to workspace $w_seven
+bindsym $mod+Shift+8 move container to workspace $w_eight
+bindsym $mod+Shift+9 move container to workspace $w_nine
+bindsym $mod+Shift+0 move container to workspace $w_ten
+
+bindsym $mod+Shift+Q move container to workspace $w_leftMoni1
+bindsym $mod+Shift+A move container to workspace $w_leftMoni2
+
+bindsym $mod+Shift+E move container to workspace $w_rightMoni1
+bindsym $mod+Shift+D move container to workspace $w_rightMoni2
+
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+g restart
+bindsym $mod+Shift+w exec "i3-nagbar -t warning -m 'Exit?' -b 'Ya' 'i3-msg exit'"
+
+mode "resize" {
+
+  bindsym h resize shrink width 10 px or 10 ppt
+    bindsym j resize grow height 10 px or 10 ppt
+    bindsym k resize shrink height 10 px or 10 ppt
+    bindsym l resize grow width 10 px or 10 ppt
+
+    bindsym Left resize shrink width 10 px or 10 ppt
+    bindsym Down resize grow height 10 px or 10 ppt
+    bindsym Up resize shrink height 10 px or 10 ppt
+    bindsym Right resize grow width 10 px or 10 ppt
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+bindsym $mod+Shift+r mode "resize"
+
+
+# ---------------------------------------------------------------
+# Status Bar
+# ---------------------------------------------------------------
+
+
+bar {
+  tray_output $centralMoni
+  #output $rightMoni
+  status_command ~/dotfiles/software/bin/exdate.sh
+    colors {
+        background #2d323d
+        statusline #ffffff
+        separator #666666
+
+        focused_workspace  #2d323d #2e343e #a4dbdb
+        active_workspace   #2d323d #2d323d #83a0a0
+        inactive_workspace #2d323d #2d323d #606a82
+        urgent_workspace   #2f343a #f08080 #ffffff
+    }
+}

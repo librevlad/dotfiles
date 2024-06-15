@@ -1,0 +1,1 @@
+/home/exfriend/.config/fisherman/get/functions/get.fish

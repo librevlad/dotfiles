@@ -1,0 +1,1 @@
+/home/exfriend/.config/fisherman/await/functions/await.fish
