@@ -3,6 +3,10 @@
     update_cache: yes
     cache_valid_time: 3600
   
+- name: Add ondrej ppa
+  ansible.builtin.apt_repository:
+    repo: ppa:ondrej/php
+    
 - name: install packages
   package:
     name:

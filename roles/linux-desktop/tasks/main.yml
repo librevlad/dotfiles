@@ -1,4 +1,16 @@
 ---
+- name: Add shutter/ppa
+  ansible.builtin.apt_repository:
+    repo: ppa:shutter/ppa
+    
+- name: Add ppa for i3-gaps
+  ansible.builtin.apt_repository:
+    repo: ppa:regolith-linux/release
+    
+- name: Add starws-box/deadbeef-player
+  ansible.builtin.apt_repository:
+    repo: ppa:starws-box/deadbeef-player
+    
 - name: Install Chrome
   include_role:
     name: darkwizard242.googlechrome
@@ -21,3 +33,59 @@
   dconf:
     key: "/org/gnome/desktop/background/picture-options"
     value: "'zoom'"
+    
+- name: install packages
+  package:
+    name:
+      - shutter 
+      - i3-gaps 
+      - i3lock 
+      - terminator 
+      - rofi 
+      - vlc 
+      - totem 
+      - deadbeef 
+      - rhythmbox 
+      - kdenlive 
+      - audacity 
+      - telegram-desktop 
+      - filezilla 
+      - qbittorrent 
+      - pavucontrol 
+      - aircrack-ng 
+      - reaver 
+      - guvcview 
+      - remmina 
+      - x11vnc 
+      - wine64 
+      - playonlinux 
+      - arc-theme 
+      - lxappearance 
+      - arandr 
+      - ecryptfs-utils 
+      - samba 
+      - xclip 
+      - xsel 
+      - gparted 
+      - kodi 
+      - breeze 
+      - breeze-gtk-theme 
+      - breeze-icon-theme 
+      - byobu speedtest-cli 
+      - kodi-addons-dev shutter 
+      - fonts-firacode 
+      - pcmanfm 
+      - feh 
+      - scrot 
+      - compton 
+      - aircrack-ng 
+      - reaver 
+      - libreoffice 
+      - blueman 
+      - adb 
+      - qemu-kvm 
+      - davfs2 
+      - gmtp 
+      - pasystray 
+      - i3-gaps
+      - virtualbox
