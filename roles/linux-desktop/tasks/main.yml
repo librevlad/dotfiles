@@ -1,4 +1,8 @@
 ---
+- name: Install Chrome
+  include_role:
+    name: darkwizard242.googlechrome
+  
 - name: wallpaper file
   copy:
     src: ../files/wallpaper.png
