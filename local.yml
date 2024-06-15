@@ -3,6 +3,12 @@
   connection: local
   become: true
 
+  pre_tasks:
+    - name: Install requirements
+      delegate_to: localhost
+      ansible.builtin.command: ansible-galaxy install -r roles/linux-desktop/requirements.yml
+    # Other tasks that you run BEFORE the roles
+    
   roles:
   - linux-base
   - linux-desktop
