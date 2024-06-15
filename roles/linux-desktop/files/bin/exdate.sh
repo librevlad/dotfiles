@@ -1,7 +1,7 @@
 #!/bin/bash
 while true; do 
 
-  php ~/dotfiles/software/bin/exdate.php
+  php ~/dotfiles/roles/linux-desktop/files/bin/exdate.php
   sleep 1
 
 done

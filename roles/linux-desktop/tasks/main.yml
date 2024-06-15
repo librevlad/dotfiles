@@ -35,14 +35,14 @@
 - name: copy terminator
   copy:
     src: ../files/terminator
-    dest: /home/librevlad/.config/terminator
+    dest: /home/librevlad/.config/
     owner: librevlad
     group: librevlad
 
 - name: copy i3
   copy:
     src: ../files/i3
-    dest: /home/librevlad/.config/i3
+    dest: /home/librevlad/.config/
     owner: librevlad
     group: librevlad
 

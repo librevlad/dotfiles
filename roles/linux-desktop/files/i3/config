@@ -107,9 +107,9 @@ exec pulseaudio --start
 exec xset -dpms s off
 exec setxkbmap -option grp:alt_shift_toggle "us,ru" -option grp_led:caps
 exec_always ~/.screenlayout/current.sh
-exec_always ~/dotfiles/software/bin/kbfix.sh
-exec_always ~/dotfiles/software/bin/wallpaper.sh
-exec --no-startup-id "compton --config ~/dotfiles/software/gui/compton/compton.conf"
+exec_always ~/dotfiles/roles/linux-desktop/files/bin/kbfix.sh
+exec_always ~/dotfiles/roles/linux-desktop/files/bin/wallpaper.sh
+exec --no-startup-id "compton --config ~/dotfiles/roles/linux-desktop/files/gui/compton/compton.conf"
 
 
 # ---------------------------------------------------------------
@@ -156,7 +156,7 @@ bindsym $mod+Return exec terminator
 bindsym $mod+c kill
 
 bindsym $mod+s exec rofi -show run
-bindsym $mod+t exec ~/dotfiles/software/bin/lock.sh
+bindsym $mod+t exec ~/dotfiles/roles/linux-desktop/files/bin/lock.sh
 
 
 # change focus
@@ -303,7 +303,7 @@ bindsym $mod+Shift+r mode "resize"
 bar {
   tray_output $centralMoni
   #output $rightMoni
-  status_command ~/dotfiles/software/bin/exdate.sh
+  status_command ~/dotfiles/roles/linux-desktop/files/bin/exdate.sh
     colors {
         background #2d323d
         statusline #ffffff

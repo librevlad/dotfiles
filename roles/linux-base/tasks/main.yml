@@ -68,14 +68,14 @@
 
 - name: copy .vim
   copy:
-    src: ../files/vim
-    dest: /home/librevlad/.vim
+    src: ../files/.vim
+    dest: /home/librevlad/
     owner: librevlad
     group: librevlad
 
 - name: copy .vimrc
   copy:
-    src: ../files/vim/vimrc
+    src: ../files/.vim/vimrc
     dest: /home/librevlad/.ideavimrc
     owner: librevlad
     group: librevlad
@@ -83,7 +83,7 @@
 - name: copy fish
   copy:
     src: ../files/fish
-    dest: /home/librevlad/.config/fish
+    dest: /home/librevlad/.config/
     owner: librevlad
     group: librevlad
 
