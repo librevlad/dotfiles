@@ -1,94 +1,97 @@
 ---
-- name: Only run "update_cache=yes" if the last one is more than 3600 seconds ago
-  ansible.builtin.apt:
-    update_cache: yes
-    cache_valid_time: 3600
+- hosts: localhost
+  become: yes
+  tasks: 
+  - name: Only run "update_cache=yes" if the last one is more than 3600 seconds ago
+    ansible.builtin.apt:
+      update_cache: yes
+      cache_valid_time: 3600
   
-- name: install packages
-  package:
-    name:
-      - htop
-      - tmux
-      - python3-psutil
-      - curl
-      - software-properties-common
-      - nodejs
-      - fish
-      - fzf
-      - vim
-      - php8.3
-      - php8.3-common
-      - php8.3-mysql
-      - php8.3-xml
-      - php8.1-xmlrpc
-      - php8.3-curl
-      - php8.3-gd
-      - php8.3-imagick
-      - php8.3-cli
-      - php8.1-dev
-      - php8.3-imap
-      - php8.3-mbstring
-      - php8.3-opcache
-      - php8.3-soap
-      - php8.3-zip
-      - php8.3-redis
-      - php8.3-intl
-      - composer
-      - docker.io
-      - docker-compose
-      - wget
-      - findutils
-      - tinc
-      - dirb
-      - tldr
-      - net-tools
-      - plocate
-      - mysql-client
-      - nmap
+  - name: install packages
+    package:
+      name:
+        - htop
+        - tmux
+        - python3-psutil
+        - curl
+        - software-properties-common
+        - nodejs
+        - fish
+        - fzf
+        - vim
+        - php8.3
+        - php8.3-common
+        - php8.3-mysql
+        - php8.3-xml
+        - php8.1-xmlrpc
+        - php8.3-curl
+        - php8.3-gd
+        - php8.3-imagick
+        - php8.3-cli
+        - php8.1-dev
+        - php8.3-imap
+        - php8.3-mbstring
+        - php8.3-opcache
+        - php8.3-soap
+        - php8.3-zip
+        - php8.3-redis
+        - php8.3-intl
+        - composer
+        - docker.io
+        - docker-compose
+        - wget
+        - findutils
+        - tinc
+        - dirb
+        - tldr
+        - net-tools
+        - plocate
+        - mysql-client
+        - nmap
     
-- name: copy wallpaper file
-  copy:
-    src: files/wallpaper.png
-    dest: /usr/share/backgrounds/ansible-wallpaper.png
-    owner: root
-    group: root
+  - name: copy wallpaper file
+    copy:
+      src: files/wallpaper.png
+      dest: /usr/share/backgrounds/ansible-wallpaper.png
+      owner: root
+      group: root
 
-- name: set wallpaper
-  become_user: librevlad
-  dconf:
-    key: "/org/gnome/desktop/background/picture-uri"
-    value: "'file:///usr/share/backgrounds/ansible-wallpaper.png'"
+  - name: set wallpaper
+    become_user: librevlad
+    dconf:
+      key: "/org/gnome/desktop/background/picture-uri"
+      value: "'file:///usr/share/backgrounds/ansible-wallpaper.png'"
 
-- name: set wallpaper position
-  become_user: librevlad
-  dconf:
-    key: "/org/gnome/desktop/background/picture-options"
-    value: "'zoom'"
+  - name: set wallpaper position
+    become_user: librevlad
+    dconf:
+      key: "/org/gnome/desktop/background/picture-options"
+      value: "'zoom'"
 
-- name: copy .bashrc file
-  copy:
-   src: files/bashrc
-   dest: /home/librevlad/.bashrc
-   owner: librevlad
-   group: librevlad
+  - name: copy .bashrc file
+    copy:
+     src: files/bashrc
+     dest: /home/librevlad/.bashrc
+     owner: librevlad
+     group: librevlad
 
-- name: add ansible user
-  user:
-    name: velociraptor
-    system: yes
+  - name: add ansible user
+    user:
+      name: velociraptor
+      system: yes
 
-- name: set up sudo for ansible user
-  copy:
-    src: files/sudoer_velociraptor
-    dest: /etc/sudoers.d/velociraptor
-    owner: root
-    group: root
-    mode: 0440
+  - name: set up sudo for ansible user
+    copy:
+      src: files/sudoer_velociraptor
+      dest: /etc/sudoers.d/velociraptor
+      owner: root
+      group: root
+      mode: 0440
 
-- name: set up sudo for ansible user
-  copy:
-    src: files/sudoer_librevlad
-    dest: /etc/sudoers.d/librevlad
-    owner: root
-    group: root
-    mode: 0440
+  - name: set up sudo for ansible user
+    copy:
+      src: files/sudoer_librevlad
+      dest: /etc/sudoers.d/librevlad
+      owner: root
+      group: root
+      mode: 0440
