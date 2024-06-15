@@ -89,7 +89,7 @@
 
 - name: Apply fish
   ansible.builtin.shell:
-    cmd: sudo chsh fish librevlad
+    cmd: sudo chsh -s fish librevlad
 
 - name: copy .gitconfig file
   copy:
