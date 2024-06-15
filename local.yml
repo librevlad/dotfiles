@@ -18,7 +18,7 @@
       group: root
 
   - name: set wallpaper
-    become_user: jay
+    become_user: librevlad
     dconf:
       key: "/org/gnome/desktop/background/picture-uri"
       value: "'file:///usr/share/backgrounds/ansible-wallpaper.png'"
