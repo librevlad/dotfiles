@@ -72,3 +72,14 @@
       - pasystray 
       - i3
       - virtualbox
+      
+ - name: Install snaps
+  community.general.snap:
+    name:
+      - phpstorm
+      - sublime-text
+      - slack
+      - opera
+      - riseup-vpn
+    options:
+      - classic
