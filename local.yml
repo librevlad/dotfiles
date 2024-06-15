@@ -12,7 +12,7 @@
         
   - name: Install psutil python package
     ansible.builtin.pip:
-    	name: psutil
+      name: psutil
     
   - name: copy wallpaper file
     copy:
