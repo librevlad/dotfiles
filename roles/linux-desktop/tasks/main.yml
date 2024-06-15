@@ -1,8 +1,4 @@
 ---
-- name: Add shutter/ppa
-  ansible.builtin.apt_repository:
-    repo: ppa:shutter/ppa
-    
 - name: Add ppa for i3-gaps
   ansible.builtin.apt_repository:
     repo: ppa:regolith-linux/release
@@ -37,7 +33,6 @@
 - name: install packages
   package:
     name:
-      - shutter 
       - i3-gaps 
       - i3lock 
       - terminator 
