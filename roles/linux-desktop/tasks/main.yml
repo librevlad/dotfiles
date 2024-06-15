@@ -55,8 +55,8 @@
 
 - name: wallpaper file
   copy:
-    src: ../files/wallpaper.png
-    dest: /usr/share/backgrounds/ansible-wallpaper.png
+    src: ../files/wallpaper.jpg
+    dest: /usr/share/backgrounds/ansible-wallpaper.jpg
     owner: root
     group: root
     
@@ -64,7 +64,7 @@
   become_user: librevlad
   dconf:
     key: "/org/gnome/desktop/background/picture-uri"
-    value: "'file:///usr/share/backgrounds/ansible-wallpaper.png'"
+    value: "'file:///usr/share/backgrounds/ansible-wallpaper.jpg'"
 
 - name: set wallpaper position
   become_user: librevlad
