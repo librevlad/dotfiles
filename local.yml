@@ -42,6 +42,7 @@
         - php8.3-zip
         - php8.3-redis
         - php8.3-intl
+        - composer
         - docker.io
         - docker-compose
         - wget
