@@ -9,10 +9,7 @@
       name:
         - htop
         - tmux
-        
-  - name: Install psutil python package
-    ansible.builtin.pip:
-      name: psutil
+        - python3-psutil
     
   - name: copy wallpaper file
     copy:
