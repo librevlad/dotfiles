@@ -1,8 +1,4 @@
 ---
-- name: Add ppa for i3-gaps
-  ansible.builtin.apt_repository:
-    repo: ppa:regolith-linux/release
-    
 - name: Add starws-box/deadbeef-player
   ansible.builtin.apt_repository:
     repo: ppa:starws-box/deadbeef-player
@@ -82,5 +78,5 @@
       - davfs2 
       - gmtp 
       - pasystray 
-      - i3-gaps
+      - i3
       - virtualbox
