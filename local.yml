@@ -44,7 +44,6 @@
         - php8.3-intl
         - docker.io
         - docker-compose
-        - youtube-dl
         - wget
         - findutils
         - tinc
