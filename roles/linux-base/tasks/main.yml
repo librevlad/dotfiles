@@ -17,6 +17,8 @@
 - name: install packages
   package:
     name:
+      - unrar
+      - git-crypt
       - htop
       - tmux
       - python3-psutil
