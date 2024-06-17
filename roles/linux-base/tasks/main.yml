@@ -17,6 +17,8 @@
 - name: install packages
   package:
     name:
+      - apt-transport-https
+      - ca-certificates
       - unrar
       - git-crypt
       - htop
@@ -29,9 +31,10 @@
       - fzf
       - vim
       - byobu
-      - php8.3
+      - sqlite3
       - php8.3-common
       - php8.3-mysql
+      - php8.3-pdo-sqlite
       - php8.3-xml
       - php8.1-xmlrpc
       - php8.3-curl
