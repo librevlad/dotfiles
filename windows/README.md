@@ -4,7 +4,7 @@ The same habits on Windows (Excel keeps it there): `pwsh -File windows\setup.ps1
 
 | What | Where it comes from |
 |---|---|
-| GlazeWM = i3 (`$mod` = Win, h/j/k/l, workspaces 1..0, L1/L2, R1/R2, TV1..0, resize mode) | `glazewm/gen_config.py` (encodes `roles/linux-desktop/files/i3/config`) |
+| GlazeWM = i3 (`$mod` = Win, h/j/k/l, workspaces 1..0 on the primary monitor, L1/L2 on the left one, R1/R2 on the right one, TV1..0, resize mode; `monitor_watch.py` re-binds them when monitors are plugged in or out) | `glazewm/gen_config.py` (encodes `roles/linux-desktop/files/i3/config`) |
 | Zebar bar = i3bar colours, `battery / dd.mm.yyyy HH:mm:ss` | `zebar/i3bar` |
 | PowerShell 7: starship (fish colours), zoxide, fzf Ctrl+R/T, the fish functions (ga gs gc gl push nah c up down k rf n pa ...) | `powershell/`, `starship.toml` |
 | Windows Terminal: Terminator palette, Fira Code | `terminal/scheme.json` |

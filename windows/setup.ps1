@@ -24,6 +24,8 @@ Copy-To "$here\vim\_vimrc" "$HOME\_vimrc"
 
 # GlazeWM (config generated from roles/linux-desktop/files/i3/config) + Zebar i3bar
 Copy-To "$here\glazewm\gen_config.py" "$HOME\.glzr\glazewm\gen_config.py"
+Copy-To "$here\glazewm\monitor_watch.py" "$HOME\.glzr\glazewm\monitor_watch.py"   # L/R workspaces follow the side monitors
+python -m pip install -q pyyaml
 python "$HOME\.glzr\glazewm\gen_config.py"
 Copy-To "$here\zebar\i3bar" "$HOME\.glzr\zebar\i3bar"
 Set-Content -LiteralPath "$HOME\.glzr\zebar\settings.json" -Encoding utf8 -Value '{ "startupConfigs": [ { "pack": "i3bar", "widget": "bar", "preset": "default" } ] }'

@@ -7,12 +7,53 @@ import yaml
 HOME = os.path.expanduser("~")
 FLOW = HOME + r"\scoop\apps\flow-launcher\current\Flow.Launcher.exe"
 ZEBAR = HOME + r"\scoop\apps\zebar\current\zebar.exe"
+PYW = HOME + r"\AppData\Local\Programs\Python\Python313\pythonw.exe"
+WATCH = os.path.join(HOME, ".glzr", "glazewm", "monitor_watch.py")  # keeps workspaces on their i3 outputs
 OUT = os.path.join(HOME, ".glzr", "glazewm", "config.yaml")
 
 main = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']   # i3: " 1 " .. " 0 " (browser, ide, term, music, chat, files, 7..9, ten)
 side = {'q': 'L1', 'a': 'L2', 'e': 'R1', 'd': 'R2'}         # i3: left / right monitor workspaces
 tv = ['TV' + d for d in main]                                # i3: $mod+Mod1+digit
 dirs = [('left', 'h', 'left'), ('down', 'j', 'down'), ('up', 'k', 'up'), ('right', 'l', 'right')]
+
+
+def monitor_layout():
+    """i3 outputs -> GlazeWM monitor indices (0 = leftmost). Centre = the Windows primary monitor (i3: $centralMoni),
+    left / right = its neighbours (i3: $leftMoni / $rightMoni), TV = any further monitor. None = not connected."""
+    import ctypes
+    import ctypes.wintypes as w
+    user32 = ctypes.windll.user32
+
+    class MONITORINFO(ctypes.Structure):
+        _fields_ = [('cbSize', w.DWORD), ('rcMonitor', w.RECT), ('rcWork', w.RECT), ('dwFlags', w.DWORD)]
+
+    found = []
+    proc = ctypes.WINFUNCTYPE(ctypes.c_int, w.HMONITOR, w.HDC, ctypes.POINTER(w.RECT), w.LPARAM)
+
+    def cb(h, _dc, _r, _l):
+        mi = MONITORINFO()
+        mi.cbSize = ctypes.sizeof(mi)
+        user32.GetMonitorInfoW(h, ctypes.byref(mi))
+        found.append((mi.rcMonitor.left, mi.rcMonitor.top, bool(mi.dwFlags & 1)))
+        return 1
+
+    user32.EnumDisplayMonitors(None, None, proc(cb), 0)
+    found.sort()
+    n = len(found)
+    centre = next((i for i, m in enumerate(found) if m[2]), 0)
+    left = centre - 1 if centre >= 1 else None
+    right = centre + 1 if centre + 1 < n else None
+    rest = [i for i in range(n) if i not in (centre, left, right)]
+    return {'count': n, 'centre': centre if n > 1 else None, 'left': left, 'right': right, 'tv': rest[0] if rest else None}
+
+
+MON = monitor_layout()
+
+
+def ws(name, where):
+    """A workspace, bound to its i3 output when that monitor is connected."""
+    idx = MON[where]
+    return {'name': name, 'bind_to_monitor': idx} if idx is not None else {'name': name}
 
 L = []
 
@@ -74,7 +115,7 @@ resize.append({'commands': ['wm-disable-binding-mode --name resize'], 'bindings'
 no_effects = {'hide_title_bar': {'enabled': False}, 'corner_style': {'enabled': True, 'style': 'square'}}
 cfg = {
     'general': {
-        'startup_commands': ['shell-exec ' + ZEBAR, 'shell-exec ' + FLOW],
+        'startup_commands': ['shell-exec ' + ZEBAR, 'shell-exec ' + FLOW, f'shell-exec {PYW} {WATCH}'],
         'shutdown_commands': ['shell-exec taskkill /IM zebar.exe /F'],
         'config_reload_commands': [],
         'focus_follows_cursor': True,            # i3 default focus_follows_mouse yes
@@ -94,7 +135,8 @@ cfg = {
     'window_behavior': {'initial_state': 'tiling', 'state_defaults': {
         'floating': {'centered': True, 'shown_on_top': False},
         'fullscreen': {'maximized': False, 'shown_on_top': False}}},
-    'workspaces': [{'name': n} for n in main + list(side.values()) + tv],
+    'workspaces': [ws(n, 'centre') for n in main] + [ws(n, 'left') for n in ('L1', 'L2')]
+                  + [ws(n, 'right') for n in ('R1', 'R2')] + [ws(n, 'tv') for n in tv],
     'window_rules': [
         {'commands': ['ignore'], 'match': [
             {'window_process': {'equals': 'zebar'}},
@@ -130,5 +172,6 @@ io.open(OUT, 'w', encoding='utf-8', newline='\n').write(
     head + yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False, width=200))
 d = yaml.safe_load(io.open(OUT, encoding='utf-8'))
 keys = [b for k in d['keybindings'] for b in k['bindings']]
+print('monitors:', MON)
 print('keybindings:', len(d['keybindings']), 'keys:', len(keys),
       'duplicates:', sorted({k for k in keys if keys.count(k) > 1}))
