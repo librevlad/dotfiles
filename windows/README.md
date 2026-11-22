@@ -15,7 +15,7 @@ The same habits on Windows (Excel keeps it there): `pwsh -File windows\setup.ps1
 
 Differences from i3: Win+L is the Windows lock (focus right is also Win+Right), no tabbed layout, Win+Space switches
 the keyboard layout. Extras not in i3: Win+Shift+V clipboard history (CopyQ); windows go to their workspaces
-(browser 1, VS Code 2, terminal 3, Telegram 5, Explorer 6, Excel/Word 7).
+(browser 1, VS Code 2, terminal 3, Telegram 5, Explorer 6, Excel/Word 7), and focus follows them.
 
 ## WSL
 

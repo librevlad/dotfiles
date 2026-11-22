@@ -55,7 +55,7 @@ kb('wm-enable-binding-mode --name resize', 'lwin+shift+r')             # mode "r
 # not in i3: clipboard history (Win+V became split v, as in i3)
 kb('shell-exec ' + HOME + r'\scoop\apps\copyq\current\copyq.exe toggle', 'lwin+shift+v')
 
-# i3 "assign": new windows of these apps go to their workspace (i3 names: 1 browser, 2 ide, 3 term, 5 chat, 6 files)
+# i3 "assign" + follow: new windows of these apps go to their workspace and focus follows them (i3 names: 1 browser, 2 ide, 3 term, 5 chat, 6 files)
 ASSIGN = [
     ('1', [{'window_process': {'regex': '^(chrome|firefox|msedge)$'}}]),
     ('2', [{'window_process': {'regex': '^(Code|phpstorm64)$'}}]),
@@ -115,7 +115,8 @@ cfg = {
             {'window_process': {'equals': 'copyq'}},         # clipboard history (Win+Shift+V)
             {'window_process': {'equals': 'Everything'}},
         ]},
-    ] + [{'commands': [f'move --workspace {ws}'], 'match': m} for ws, m in ASSIGN],
+    # follow the window: otherwise a taskbar click opens it on a hidden workspace and seems to do nothing
+    ] + [{'commands': [f'move --workspace {ws}', f'focus --workspace {ws}'], 'match': m} for ws, m in ASSIGN],
     'binding_modes': [{'name': 'resize', 'keybindings': resize}],
     'keybindings': L,
 }
