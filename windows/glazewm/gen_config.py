@@ -101,7 +101,10 @@ kb('shell-exec explorer.exe', 'lwin+alt+e')
 # i3 "assign" + follow: new windows of these apps go to their workspace and focus follows them (i3 names: 1 browser, 2 ide, 3 term, 5 chat, 6 files)
 ASSIGN = [
     ('1', [{'window_process': {'regex': '^(chrome|firefox|msedge)$'}}]),
-    ('2', [{'window_process': {'regex': '^(Code|phpstorm64)$'}}]),
+    ('2', [{'window_process': {'regex': '^(Code|phpstorm64)$'}},
+           # the Claude desktop app's main window: closing it hides it to the tray, and the tray icon brings it back
+           # on whatever workspace is focused, so it seemed to vanish from 2
+           {'window_process': {'equals': 'claude'}, 'window_title': {'equals': 'Claude'}}]),
     # terminal and Explorer are NOT assigned: they are needed on any workspace (user, 22.11.2026)
     ('5', [{'window_process': {'equals': 'Telegram'}}]),
     ('7', [{'window_process': {'equals': 'EXCEL'}, 'window_class': {'equals': 'XLMAIN'}},
@@ -152,8 +155,10 @@ cfg = {
             {'window_process': {'equals': 'POWERPNT'}, 'window_class': {'not_regex': 'PPTFrameClass'}},
         ]},
         {'commands': ['ignore'], 'match': [{'window_process': {'equals': 'espansod'}}]},  # snippet popups
+        # Standard Windows dialogs (Save As, Open, properties, message boxes): left to Windows. Floating + centring
+        # them moved them between monitors of different scale (100/150/200%) and they came out cut off.
+        {'commands': ['ignore'], 'match': [{'window_class': {'equals': '#32770'}}]},
         {'commands': ['set-floating --centered'], 'match': [
-            {'window_class': {'equals': '#32770'}},          # standard Windows dialogs
             {'window_process': {'equals': 'Taskmgr'}},
             {'window_process': {'equals': 'copyq'}},         # clipboard history (Win+Shift+V)
             {'window_process': {'equals': 'Everything'}},

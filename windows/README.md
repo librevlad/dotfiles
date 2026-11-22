@@ -17,7 +17,7 @@ Look: gaps 20, Windows 11 rounded corners with the system window shadows (i3 had
 
 Differences from i3: Win+L is the Windows lock (focus right is also Win+Right), no tabbed layout, Win+Space switches
 the keyboard layout. Extras not in i3: Win+Shift+V clipboard history (CopyQ); windows go to their workspaces
-(browser 1, VS Code 2, Telegram 5, Excel/Word 7), and focus follows them; the terminal and File Explorer open on the
+(browser 1, VS Code and the Claude app 2, Telegram 5, Excel/Word 7), and focus follows them; standard Windows dialogs are left alone (moving them between monitors of different scale cut them off); the terminal and File Explorer open on the
 current workspace. Win+Alt+E = File Explorer (Win+E is workspace R1, as in i3).
 
 ## WSL
