@@ -36,3 +36,6 @@ Settings -> Personalization -> Taskbar -> Taskbar behaviors -> Automatically hid
 Optional, stronger shadows: Windhawk + mod "Windows Shadows Tuner" (native-shadow-tuner). It hooks dwm.exe, so add
 `dwm.exe` to Windhawk -> Settings -> Advanced settings -> More advanced settings (registry:
 `HKLM\SOFTWARE\Windhawk\Engine\Settings`, `Include`, pipe-separated). Shadows hardly show on a dark wallpaper.
+
+Windows' own Win+letter shortcuts that the i3 bindings use (otherwise Win+S also opens Start):
+`HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced`, `DisabledHotkeys` = `SCTQAEDBVHKF`, then restart Explorer.
