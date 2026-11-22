@@ -32,3 +32,7 @@ plus `--tags extras`: ranger config, `wsl/tmux.conf` (tmux 3.x version), `~/docs
 ## Without the taskbar
 
 Settings -> Personalization -> Taskbar -> Taskbar behaviors -> Automatically hide the taskbar. The bar sits at the bottom like i3bar (the hidden taskbar shows up over it only when the mouse touches the very edge). Windows by name: PowerToys Command Palette, Win+Alt+Space. In PowerToys turn FancyZones off (it fights GlazeWM); Text Extractor = Win+Shift+T.
+
+Optional, stronger shadows: Windhawk + mod "Windows Shadows Tuner" (native-shadow-tuner). It hooks dwm.exe, so add
+`dwm.exe` to Windhawk -> Settings -> Advanced settings -> More advanced settings (registry:
+`HKLM\SOFTWARE\Windhawk\Engine\Settings`, `Include`, pipe-separated). Shadows hardly show on a dark wallpaper.
