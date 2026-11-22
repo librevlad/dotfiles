@@ -1,0 +1,12 @@
+# WSL2 settings (22.11.2026)
+[wsl2]
+# localhost is shared both ways: a server started in Linux opens in the Windows browser and back
+networkingMode=mirrored
+dnsTunneling=true
+autoProxy=true
+memory=16GB
+
+[experimental]
+# give unused Linux memory back to Windows and keep the virtual disk small
+autoMemoryReclaim=gradual
+sparseVhd=true

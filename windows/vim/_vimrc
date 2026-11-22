@@ -1,0 +1,23 @@
+" Windows entry point for the vim config from ~/dotfiles (roles/linux-base/files/.vim, copied to ~/.vim).
+" The dotfiles files stay untouched; Windows-only fixes go below.
+set runtimepath^=~/.vim runtimepath+=~/.vim/after
+if filereadable(expand('~/AppData/Local/Programs/Python/Python313/python313.dll'))
+  let &pythonthreedll = expand('~/AppData/Local/Programs/Python/Python313/python313.dll')
+endif
+
+" The last line of vimrc is `set clipboard+=ideaput` (an IdeaVim option): plain Vim rejects only that
+try
+  source ~/.vim/vimrc
+catch /E474.*ideaput/
+endtry
+
+" --- Windows fixes ---
+set clipboard=unnamed                 " unnamedplus/ideaput are X11/IdeaVim values
+set encoding=utf-8 fileencodings=ucs-bom,utf-8,cp1251,default
+set fileformats=unix,dos
+if has('gui_running')
+  set guifont=FiraCode_Nerd_Font:h13   " Fira Code from appearance.vim
+  set linespace=4
+elseif has('vcon')
+  silent! set termguicolors            " Windows Terminal: true colour
+endif

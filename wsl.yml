@@ -1,0 +1,128 @@
+---
+# WSL variant of local.yml: role linux-base only (linux-desktop is i3/X11, not for WSL).
+# Differences from roles/linux-base/tasks/main.yml:
+#   - no "velociraptor" system user with passwordless sudo (it was for ansible-pull from cron);
+#   - user name is a variable (default: librevlad);
+#   - fisherman symlinks that point to /home/exfriend/... are not copied (they are broken here);
+#     fzf key bindings and z come from the Ubuntu packages instead (conf.d/zz-wsl.fish);
+#   - a few extra CLI tools (zoxide, ripgrep, fd-find, bat) and the user joins the docker group.
+# Run inside WSL as root:  ansible-playbook -i localhost, -c local wsl.yml -e user=librevlad
+- hosts: localhost
+  connection: local
+  become: true
+  vars:
+    user: librevlad
+    home: "/home/{{ user }}"
+    files: "{{ playbook_dir }}/roles/linux-base/files"
+
+  tasks:
+    - name: Create /work directory if it does not exist
+      ansible.builtin.file: { path: /work, state: directory, mode: '0777', owner: "{{ user }}" }
+
+    - name: Update apt cache if older than an hour
+      ansible.builtin.apt: { update_cache: yes, cache_valid_time: 3600 }
+
+    - name: Add ondrej ppa
+      ansible.builtin.apt_repository: { repo: 'ppa:ondrej/php' }
+
+    - name: Install packages (list from roles/linux-base)
+      ansible.builtin.apt:
+        name: [apt-transport-https, ca-certificates, unrar, git-crypt, htop, tmux, python3-psutil, curl,
+               software-properties-common, nodejs, fish, fzf, vim, byobu, sqlite3,
+               php8.3-common, php8.3-mysql, php8.3-pdo-sqlite, php8.3-xml, php8.1-xmlrpc, php8.3-curl, php8.3-gd,
+               php8.3-imagick, php8.3-cli, php8.1-dev, php8.3-imap, php8.3-mbstring, php8.3-opcache, php8.3-soap,
+               php8.3-zip, php8.3-redis, php8.3-intl, composer, docker.io, docker-compose, wget, findutils, tinc,
+               dirb, tldr, net-tools, plocate, mysql-client, nmap]
+        state: present
+
+    - name: Extra CLI tools for WSL
+      ansible.builtin.apt: { name: [zoxide, ripgrep, fd-find, bat, unzip, build-essential], state: present }
+
+    - name: copy .bashrc file
+      ansible.builtin.copy: { src: "{{ files }}/bashrc", dest: "{{ home }}/.bashrc", owner: "{{ user }}", group: "{{ user }}" }
+
+    - name: copy .vim
+      ansible.builtin.copy: { src: "{{ files }}/.vim", dest: "{{ home }}/", owner: "{{ user }}", group: "{{ user }}" }
+
+    - name: copy .vimrc (and .ideavimrc, as in the role)
+      ansible.builtin.copy: { src: "{{ files }}/.vim/vimrc", dest: "{{ home }}/{{ item }}", owner: "{{ user }}", group: "{{ user }}" }
+      loop: [.vimrc, .ideavimrc]
+
+    - name: find fish files (regular files only; fisherman symlinks are skipped)
+      ansible.builtin.find: { paths: "{{ files }}/fish", recurse: yes, file_type: file }
+      register: fish_files
+
+    - name: create fish directories
+      ansible.builtin.file: { path: "{{ home }}/.config/fish/{{ item }}", state: directory, owner: "{{ user }}", group: "{{ user }}" }
+      loop: ['', completions, conf.d, functions]
+
+    - name: copy fish
+      ansible.builtin.copy:
+        src: "{{ item.path }}"
+        dest: "{{ home }}/.config/fish/{{ item.path | relpath(files + '/fish') }}"
+        owner: "{{ user }}"
+        group: "{{ user }}"
+      loop: "{{ fish_files.files }}"
+      loop_control: { label: "{{ item.path | relpath(files + '/fish') }}" }
+
+    - name: fzf key bindings and z (zoxide) in fish
+      ansible.builtin.copy:
+        dest: "{{ home }}/.config/fish/conf.d/zz-wsl.fish"
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        content: |
+          # added for WSL: replaces the fisherman fzf and z plugins of the old setup
+          if status is-interactive
+              test -f /usr/share/doc/fzf/examples/key-bindings.fish; and source /usr/share/doc/fzf/examples/key-bindings.fish; and fzf_key_bindings
+              type -q zoxide; and zoxide init fish --cmd z | source
+              type -q batcat; and alias bat batcat
+              type -q fdfind; and alias fd fdfind
+          end
+
+    - name: Apply fish
+      ansible.builtin.user: { name: "{{ user }}", shell: /usr/bin/fish, groups: docker, append: yes }
+
+    - name: copy .gitconfig file
+      ansible.builtin.copy: { src: "{{ files }}/gitconfig", dest: "{{ home }}/.gitconfig", owner: "{{ user }}", group: "{{ user }}" }
+
+    - name: set up sudo for the user (sudoer_librevlad)
+      ansible.builtin.copy:
+        content: "{{ user }} ALL=(ALL) NOPASSWD: ALL\n"
+        dest: "/etc/sudoers.d/{{ user }}"
+        owner: root
+        group: root
+        mode: '0440'
+        validate: /usr/sbin/visudo -cf %s
+
+    # ---- extras (22.11.2026): ansible-playbook ... wsl.yml --tags extras ----
+    - name: ranger
+      ansible.builtin.apt: { name: ranger, state: present }
+      tags: extras
+
+    - name: ranger config dirs
+      ansible.builtin.file: { path: "{{ home }}/.config/ranger/colorschemes", state: directory, owner: "{{ user }}", group: "{{ user }}" }
+      tags: extras
+
+    - name: ranger config (rc, rifle, preview, commands, wine colourscheme)
+      ansible.builtin.copy:
+        src: "{{ files }}/ranger/{{ item }}"
+        dest: "{{ home }}/.config/ranger/{{ item }}"
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        mode: "{{ '0755' if item == 'scope.sh' else '0644' }}"
+      loop: [rc.conf, rifle.conf, scope.sh, commands.py, bookmarks, colorschemes/__init__.py, colorschemes/wine.py]
+      tags: extras
+
+    - name: tmux.conf (tmux 3.x version of roles/linux-base/files/tmux)
+      ansible.builtin.copy: { src: "{{ playbook_dir }}/wsl/tmux.conf", dest: "{{ home }}/.tmux.conf", owner: "{{ user }}", group: "{{ user }}" }
+      tags: extras
+
+    - name: Windows user name (through WSL interop)
+      ansible.builtin.command: /mnt/c/Windows/System32/cmd.exe /c echo %USERNAME%
+      register: winuser
+      changed_when: false
+      tags: extras
+
+    - name: ~/docs -> Windows documents
+      ansible.builtin.file: { src: "/mnt/c/Users/{{ winuser.stdout | trim }}/docs", dest: "{{ home }}/docs", state: link, force: yes, follow: no }
+      tags: extras

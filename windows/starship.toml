@@ -1,0 +1,15 @@
+# Prompt colours from ~/dotfiles fish config: fish_color_cwd 87d7ff, fish_color_user F08080
+"$schema" = 'https://starship.rs/config-schema.json'
+add_newline = false
+
+[username]
+style_user = 'bold #F08080'
+style_root = 'bold red'
+
+[directory]
+style = 'bold #87d7ff'
+truncation_length = 4
+truncate_to_repo = false
+
+[cmd_duration]
+min_time = 3000
