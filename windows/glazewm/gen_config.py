@@ -95,14 +95,15 @@ kb('wm-exit', 'lwin+shift+w')                                          # exit
 kb('wm-enable-binding-mode --name resize', 'lwin+shift+r')             # mode "resize"
 # not in i3: clipboard history (Win+V became split v, as in i3)
 kb('shell-exec ' + HOME + r'\scoop\apps\copyq\current\copyq.exe toggle', 'lwin+shift+v')
+# not in i3: File Explorer on the current workspace (Win+E is workspace R1, as in i3)
+kb('shell-exec explorer.exe', 'lwin+alt+e')
 
 # i3 "assign" + follow: new windows of these apps go to their workspace and focus follows them (i3 names: 1 browser, 2 ide, 3 term, 5 chat, 6 files)
 ASSIGN = [
     ('1', [{'window_process': {'regex': '^(chrome|firefox|msedge)$'}}]),
     ('2', [{'window_process': {'regex': '^(Code|phpstorm64)$'}}]),
-    ('3', [{'window_process': {'equals': 'WindowsTerminal'}}]),
+    # terminal and Explorer are NOT assigned: they are needed on any workspace (user, 22.11.2026)
     ('5', [{'window_process': {'equals': 'Telegram'}}]),
-    ('6', [{'window_process': {'equals': 'explorer'}, 'window_class': {'equals': 'CabinetWClass'}}]),
     ('7', [{'window_process': {'equals': 'EXCEL'}, 'window_class': {'equals': 'XLMAIN'}},
            {'window_process': {'equals': 'WINWORD'}, 'window_class': {'equals': 'OpusApp'}}]),
 ]
