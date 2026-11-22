@@ -2,8 +2,11 @@
   "$schema": "https://github.com/glzr-io/zebar/raw/v3.0.0/resources/zpack-schema.json",
   "name": "i3bar",
   "version": "1.0.0",
-  "description": "The i3bar from ~/dotfiles (colours, workspaces, battery / dd.mm.yyyy HH:mm:ss) for GlazeWM. No weather, no location.",
-  "tags": ["topbar", "glazewm"],
+  "description": "The i3bar from ~/dotfiles + tray icons, volume, Wi-Fi and now playing, for GlazeWM. No weather, no location.",
+  "tags": [
+    "topbar",
+    "glazewm"
+  ],
   "previewImages": [],
   "repositoryUrl": "",
   "widgets": [
@@ -15,9 +18,22 @@
       "focused": false,
       "resizable": false,
       "transparent": false,
-      "includeFiles": ["*.html", "*.css"],
-      "caching": { "defaultDuration": 604800, "rules": [] },
-      "privileges": { "shellCommands": [] },
+      "includeFiles": [
+        "*.html",
+        "*.css"
+      ],
+      "caching": {
+        "defaultDuration": 604800,
+        "rules": []
+      },
+      "privileges": {
+        "shellCommands": [
+          {
+            "program": "explorer.exe",
+            "argsRegex": "^ms-(availablenetworks|actioncenter):$"
+          }
+        ]
+      },
       "presets": [
         {
           "name": "default",
@@ -26,8 +42,14 @@
           "offsetY": "0px",
           "width": "100%",
           "height": "32px",
-          "monitorSelection": { "type": "all" },
-          "dockToEdge": { "enabled": false, "edge": null, "windowMargin": "0px" }
+          "monitorSelection": {
+            "type": "all"
+          },
+          "dockToEdge": {
+            "enabled": false,
+            "edge": null,
+            "windowMargin": "0px"
+          }
         }
       ]
     }

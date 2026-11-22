@@ -3,21 +3,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Colours and status line from ~/dotfiles/roles/linux-desktop/files/i3/config (bar {}) and bin/exdate.php -->
+    <!-- i3bar from ~/dotfiles (colours of bar {}, status like bin/exdate.php) + what the Windows taskbar gave:
+         tray icons, volume, Wi-Fi, now playing. Clicks: tray as on the taskbar; volume: wheel / click = mute;
+         Wi-Fi: click = network list; date: click = notifications and calendar. -->
     <style>
       :root {
-        --bg: #2d323d;
-        --text: #ffffff;
-        --sep: #666666;
+        --bg: #2d323d; --text: #ffffff; --sep: #666666;
         --focused-border: #2d323d; --focused-bg: #2e343e; --focused-text: #a4dbdb;
-        --active-text: #83a0a0;
-        --inactive-text: #606a82;
+        --active-text: #83a0a0; --inactive-text: #606a82;
         --urgent-border: #2f343a; --urgent-bg: #f08080; --urgent-text: #ffffff;
       }
       * { box-sizing: border-box; margin: 0; padding: 0; }
       html, body { height: 100%; background: var(--bg); color: var(--text); overflow: hidden;
         font: 500 15px 'FiraCode Nerd Font', 'Fira Code', 'JetBrainsMono Nerd Font', monospace; user-select: none; }
-      #bar { display: flex; align-items: center; height: 100%; padding: 0 6px; gap: 8px; }
+      #bar { display: flex; align-items: center; height: 100%; padding: 0 6px; gap: 10px; }
       #workspaces { display: flex; height: 100%; }
       .ws { border: 1px solid var(--bg); background: var(--bg); color: var(--inactive-text);
         font: inherit; padding: 0 10px; cursor: pointer; height: 100%; }
@@ -26,9 +25,13 @@
       #mode { display: none; border: 1px solid var(--urgent-border); background: var(--urgent-bg);
         color: var(--urgent-text); padding: 0 10px; height: 100%; align-items: center; }
       #title { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--active-text); }
-      #status { white-space: nowrap; }
+      #media { max-width: 28vw; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--active-text); cursor: pointer; }
+      #tray { display: flex; align-items: center; gap: 6px; }
+      #tray img { width: 18px; height: 18px; cursor: pointer; image-rendering: auto; }
+      #status { white-space: nowrap; display: flex; align-items: center; }
       #status .sep { color: var(--sep); padding: 0 6px; }
-      #status .low { color: var(--urgent-bg); }
+      #status .click { cursor: pointer; }
+      #status .low, #status .muted { color: var(--urgent-bg); }
     </style>
   </head>
   <body>
@@ -36,47 +39,111 @@
       <div id="workspaces"></div>
       <div id="mode"></div>
       <div id="title"></div>
+      <div id="media" title="Пауза / продолжить"></div>
+      <div id="tray"></div>
       <div id="status"></div>
     </div>
     <script type="module">
-      import * as zebar from 'https://esm.sh/zebar@3.0';
+      import * as zebar from 'https://esm.sh/zebar@3.3.1';
 
       const providers = zebar.createProviderGroup({
         glazewm: { type: 'glazewm' },
         battery: { type: 'battery' },
         keyboard: { type: 'keyboard' },
+        audio: { type: 'audio' },
+        network: { type: 'network', refreshInterval: 5000 },
+        media: { type: 'media' },
+        systray: { type: 'systray' },
         date: { type: 'date', formatting: 'dd.MM.yyyy HH:mm:ss' },
       });
 
       const $ = id => document.getElementById(id);
       const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+      const icon = cp => String.fromCodePoint(cp);   // Nerd Font (Material Design) glyphs
+      const I = { vol: 0xF057E, mute: 0xF0581, wifi: 0xF05A9, wifiOff: 0xF05AA, eth: 0xF0200, play: 0xF040A, pause: 0xF03E4 };
+      const open = uri => zebar.shellExec('explorer.exe', uri).catch(() => {});
 
-      function render() {
-        const o = providers.outputMap;
+      function renderWm(o) {
         const wm = o.glazewm;
-        if (wm) {
-          $('workspaces').innerHTML = wm.currentWorkspaces.map(w =>
-            `<button class="ws ${w.hasFocus ? 'focused' : ''} ${w.isDisplayed ? 'displayed' : ''}" data-ws="${esc(w.name)}">${esc(w.displayName ?? w.name)}</button>`
-          ).join('');
-          const modes = wm.bindingModes.map(m => m.displayName ?? m.name);
-          $('mode').style.display = modes.length ? 'flex' : 'none';
-          $('mode').textContent = modes.join(' ');
-          $('title').textContent = wm.focusedContainer?.title ?? '';
-        }
+        if (!wm) return;
+        $('workspaces').innerHTML = wm.currentWorkspaces.map(w =>
+          `<button class="ws ${w.hasFocus ? 'focused' : ''} ${w.isDisplayed ? 'displayed' : ''}" data-ws="${esc(w.name)}">${esc(w.displayName ?? w.name)}</button>`
+        ).join('');
+        const modes = wm.bindingModes.map(m => m.displayName ?? m.name);
+        $('mode').style.display = modes.length ? 'flex' : 'none';
+        $('mode').textContent = modes.join(' ');
+        $('title').textContent = wm.focusedContainer?.title ?? '';
+      }
+
+      function renderMedia(o) {
+        const s = o.media?.currentSession;
+        $('media').style.display = s ? 'block' : 'none';
+        if (s) $('media').textContent = `${icon(s.isPlaying ? I.play : I.pause)} ${s.title}${s.artist ? ' — ' + s.artist : ''}`;
+      }
+
+      // tray: rebuild only when the set of icons changes, so clicks are not lost between updates
+      let trayKey = '';
+      function renderTray(o) {
+        const icons = o.systray?.icons ?? [];
+        const key = icons.map(i => i.id + ':' + i.iconHash + ':' + i.tooltip).join('|');
+        if (key === trayKey) return;
+        trayKey = key;
+        $('tray').innerHTML = icons.map(i => `<img src="${esc(i.iconUrl)}" title="${esc(i.tooltip)}" data-id="${esc(i.id)}">`).join('');
+      }
+
+      function renderStatus(o) {
         const parts = [];
         if (o.keyboard?.layout) parts.push(esc(o.keyboard.layout.split('-')[0].toUpperCase()));
+        const dev = o.audio?.defaultPlaybackDevice;
+        if (dev) parts.push(`<span id="vol" class="click ${dev.isMuted ? 'muted' : ''}" title="${esc(dev.name)}: колесо — громкость, клик — без звука">${icon(dev.isMuted ? I.mute : I.vol)} ${Math.round(dev.volume)}%</span>`);
+        const net = o.network;
+        if (net) {
+          const t = net.defaultInterface?.type;
+          const label = t === 'wifi' ? `${icon(I.wifi)} ${esc(net.defaultGateway?.ssid ?? '')}`
+                      : t === 'ethernet' ? `${icon(I.eth)} LAN` : t ? `${icon(I.wifi)}` : `${icon(I.wifiOff)}`;
+          parts.push(`<span id="net" class="click" title="Сети">${label}</span>`);
+        }
         if (o.battery) {
           const p = Math.round(o.battery.chargePercent);
           parts.push(`<span class="${p <= 15 && !o.battery.isCharging ? 'low' : ''}">${o.battery.isCharging ? '+' : ''}${p}%</span>`);
         }
-        if (o.date) parts.push(esc(o.date.formatted));
+        if (o.date) parts.push(`<span id="date" class="click" title="Уведомления и календарь">${esc(o.date.formatted)}</span>`);
         $('status').innerHTML = parts.join('<span class="sep">/</span>');
+      }
+
+      function render() {
+        const o = providers.outputMap;
+        renderWm(o); renderMedia(o); renderTray(o); renderStatus(o);
       }
 
       $('workspaces').addEventListener('click', e => {
         const ws = e.target.closest('.ws')?.dataset.ws;
         if (ws) providers.outputMap.glazewm?.runCommand(`focus --workspace ${ws}`);
       });
+      $('media').addEventListener('click', () => providers.outputMap.media?.togglePlayPause());
+
+      const tray = () => providers.outputMap.systray;
+      const trayId = e => e.target.closest('img')?.dataset.id;
+      $('tray').addEventListener('click', e => { const id = trayId(e); if (id) tray()?.onLeftClick(id); });
+      $('tray').addEventListener('dblclick', e => { const id = trayId(e); if (id) tray()?.onLeftDoubleClick(id); });
+      $('tray').addEventListener('contextmenu', e => { e.preventDefault(); const id = trayId(e); if (id) tray()?.onRightClick(id); });
+      $('tray').addEventListener('auxclick', e => { const id = trayId(e); if (id && e.button === 1) tray()?.onMiddleClick(id); });
+      $('tray').addEventListener('mouseover', e => { const id = trayId(e); if (id) tray()?.onHoverEnter(id); });
+      $('tray').addEventListener('mouseout', e => { const id = trayId(e); if (id) tray()?.onHoverLeave(id); });
+
+      $('status').addEventListener('click', e => {
+        const a = providers.outputMap.audio, dev = a?.defaultPlaybackDevice;
+        if (e.target.closest('#vol') && dev) a.setMute(!dev.isMuted);
+        else if (e.target.closest('#net')) open('ms-availablenetworks:');
+        else if (e.target.closest('#date')) open('ms-actioncenter:');
+      });
+      $('status').addEventListener('wheel', e => {
+        const a = providers.outputMap.audio, dev = a?.defaultPlaybackDevice;
+        if (!e.target.closest('#vol') || !dev) return;
+        e.preventDefault();
+        a.setVolume(Math.max(0, Math.min(100, Math.round(dev.volume) + (e.deltaY < 0 ? 2 : -2))));
+      }, { passive: false });
+
       providers.onOutput(render);
       render();
     </script>
