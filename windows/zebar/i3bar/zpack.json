@@ -31,6 +31,10 @@
           {
             "program": "explorer.exe",
             "argsRegex": "^ms-(availablenetworks|actioncenter):$"
+          },
+          {
+            "program": "taskmgr.exe",
+            "argsRegex": "^$"
           }
         ]
       },

@@ -52,6 +52,8 @@
         keyboard: { type: 'keyboard' },
         audio: { type: 'audio' },
         network: { type: 'network', refreshInterval: 5000 },
+        cpu: { type: 'cpu', refreshInterval: 3000 },
+        memory: { type: 'memory', refreshInterval: 5000 },
         media: { type: 'media' },
         systray: { type: 'systray' },
         date: { type: 'date', formatting: 'dd.MM.yyyy HH:mm:ss' },
@@ -103,6 +105,12 @@
                       : t === 'ethernet' ? `${icon(I.eth)} LAN` : t ? `${icon(I.wifi)}` : `${icon(I.wifiOff)}`;
           parts.push(`<span id="net" class="click" title="Сети">${label}</span>`);
         }
+        if (o.cpu || o.memory) {   // red above 85%; click = Task Manager
+          const pct = (name, v) => `<span class="${v > 85 ? 'low' : ''}">${name} ${Math.round(v)}%</span>`;
+          const items = [o.cpu && pct('CPU', o.cpu.usage), o.memory && pct('RAM', o.memory.usage)].filter(Boolean);
+          const ram = o.memory ? ` (RAM ${(o.memory.usedMemory / 2 ** 30).toFixed(1)} из ${(o.memory.totalMemory / 2 ** 30).toFixed(0)} ГБ)` : '';
+          parts.push(`<span id="sys" class="click" title="Диспетчер задач${ram}">${items.join(' ')}</span>`);
+        }
         if (o.battery) {
           const p = Math.round(o.battery.chargePercent);
           parts.push(`<span class="${p <= 15 && !o.battery.isCharging ? 'low' : ''}">${o.battery.isCharging ? '+' : ''}${p}%</span>`);
@@ -136,6 +144,7 @@
         if (e.target.closest('#vol') && dev) a.setMute(!dev.isMuted);
         else if (e.target.closest('#net')) open('ms-availablenetworks:');
         else if (e.target.closest('#date')) open('ms-actioncenter:');
+        else if (e.target.closest('#sys')) zebar.shellExec('taskmgr.exe', '').catch(() => {});
       });
       $('status').addEventListener('wheel', e => {
         const a = providers.outputMap.audio, dev = a?.defaultPlaybackDevice;

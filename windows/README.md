@@ -5,7 +5,9 @@ The same habits on Windows (Excel keeps it there): `pwsh -File windows\setup.ps1
 | What | Where it comes from |
 |---|---|
 | GlazeWM = i3 (`$mod` = Win, h/j/k/l, workspaces 1..0 on the primary monitor, L1/L2 on the left one, R1/R2 on the right one, TV1..0, resize mode; `monitor_watch.py` re-binds them when monitors are plugged in or out) | `glazewm/gen_config.py` (encodes `roles/linux-desktop/files/i3/config`) |
-| Zebar bar = i3bar colours, `battery / dd.mm.yyyy HH:mm:ss`, plus what the taskbar gave: tray icons (clicks as on the taskbar), volume (wheel / click = mute), Wi-Fi (click = network list), now playing (click = pause), date click = notifications | `zebar/i3bar` |
+| Zebar bar = i3bar colours, `CPU / RAM / battery / dd.mm.yyyy HH:mm:ss`, plus what the taskbar gave: tray icons (clicks as on the taskbar), volume (wheel / click = mute), Wi-Fi (click = network list), now playing (click = pause), date click = notifications, CPU/RAM click = Task Manager (red above 85%) | `zebar/i3bar` |
+| Flow Launcher (Win+S) and CopyQ (Win+Shift+V) in the i3bar colours | `flow-launcher/i3bar.xaml`, `copyq/i3bar.ini` |
+| AltSnap: Win + left mouse drags a window, Win + right mouse resizes it (i3 `floating_modifier`) | `setup.ps1` (`Hotkeys=5B 5C`) |
 | PowerShell 7: starship (fish colours), zoxide, fzf Ctrl+R/T, the fish functions (ga gs gc gl push nah c up down k rf n pa ...) | `powershell/`, `starship.toml` |
 | Windows Terminal: Terminator palette, Fira Code | `terminal/scheme.json` |
 | vim: `roles/linux-base/files/.vim` + Windows fixes | `vim/_vimrc` |
@@ -18,7 +20,9 @@ Look: gaps 20, Windows 11 rounded corners with the system window shadows (i3 had
 Differences from i3: Win+L is the Windows lock (focus right is also Win+Right), no tabbed layout, Win+Space switches
 the keyboard layout. Extras not in i3: Win+Shift+V clipboard history (CopyQ); windows go to their workspaces
 (browser 1, VS Code and the Claude app 2, Telegram 5, Excel/Word 7), and focus follows them; standard Windows dialogs are left alone (moving them between monitors of different scale cut them off); the terminal and File Explorer open on the
-current workspace. Win+Alt+E = File Explorer (Win+E is workspace R1, as in i3).
+current workspace. Win+Alt+E = File Explorer (Win+E is workspace R1, as in i3). Win+Shift+Enter = terminal in WSL
+Ubuntu. Win+` = drop-down terminal (i3 scratchpad style, `glazewm/quake.py`): one floating Windows Terminal window
+titled "Quake" at the top of the focused monitor; the key brings it to the current workspace or hides it.
 
 ## WSL
 

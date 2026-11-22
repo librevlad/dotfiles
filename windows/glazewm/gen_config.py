@@ -62,7 +62,11 @@ def kb(cmds, *keys):
     L.append({'commands': cmds if isinstance(cmds, list) else [cmds], 'bindings': list(keys)})
 
 
+QUAKE = os.path.join(HOME, ".glzr", "glazewm", "quake.py")             # drop-down terminal toggle
+UBUNTU = '{b40bed0d-cfad-5ecf-a53d-e1c7a438aa67}'                      # Windows Terminal profile "Ubuntu (fish)"
 kb('shell-exec wt.exe', 'lwin+enter')                                  # $mod+Return exec terminator
+kb(f'shell-exec wt.exe -p {UBUNTU}', 'lwin+shift+enter')               # not in i3: the same, in WSL Ubuntu
+kb(f'shell-exec {PYW} {QUAKE}', 'lwin+oem_tilde')                          # not in i3: drop-down terminal (scratchpad style)
 kb('close', 'lwin+c')                                                  # $mod+c kill
 kb('shell-exec ' + FLOW, 'lwin+s')                                     # $mod+s exec rofi -show run
 kb('shell-exec rundll32.exe user32.dll,LockWorkStation', 'lwin+t')     # $mod+t lock.sh
@@ -163,6 +167,9 @@ cfg = {
             {'window_process': {'equals': 'copyq'}},         # clipboard history (Win+Shift+V)
             {'window_process': {'equals': 'Everything'}},
         ]},
+        # the Win+` drop-down terminal (quake.py places it); the title arrives just after creation -> also on title_change
+        {'commands': ['set-floating --shown-on-top --centered=false'], 'on': ['manage', 'title_change'],
+         'match': [{'window_process': {'equals': 'WindowsTerminal'}, 'window_title': {'equals': 'Quake'}}]},
     # follow the window: otherwise a taskbar click opens it on a hidden workspace and seems to do nothing
     ] + [{'commands': [f'move --workspace {ws}', f'focus --workspace {ws}'], 'match': m} for ws, m in ASSIGN],
     'binding_modes': [{'name': 'resize', 'keybindings': resize}],
