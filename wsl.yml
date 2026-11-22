@@ -2,7 +2,7 @@
 # WSL variant of local.yml: role linux-base only (linux-desktop is i3/X11, not for WSL).
 # Differences from roles/linux-base/tasks/main.yml:
 #   - no "velociraptor" system user with passwordless sudo (it was for ansible-pull from cron);
-#   - user name is a variable (default: librevlad);
+#   - user name is a variable (default: librevlad); /work is a link to C:\work;
 #   - fisherman symlinks that point to /home/exfriend/... are not copied (they are broken here);
 #     fzf key bindings and z come from the Ubuntu packages instead (conf.d/zz-wsl.fish);
 #   - a few extra CLI tools (zoxide, ripgrep, fd-find, bat) and the user joins the docker group.
@@ -16,8 +16,14 @@
     files: "{{ playbook_dir }}/roles/linux-base/files"
 
   tasks:
-    - name: Create /work directory if it does not exist
-      ansible.builtin.file: { path: /work, state: directory, mode: '0777', owner: "{{ user }}" }
+    - name: Windows user name (through WSL interop)
+      ansible.builtin.command: /mnt/c/Windows/System32/cmd.exe /c echo %USERNAME%
+      register: winuser
+      changed_when: false
+      tags: [always]
+
+    - name: /work = C:\work (one projects folder for Windows and Linux; cdw in fish and PowerShell)
+      ansible.builtin.file: { src: /mnt/c/work, dest: /work, state: link, force: yes, follow: no }
 
     - name: Update apt cache if older than an hour
       ansible.builtin.apt: { update_cache: yes, cache_valid_time: 3600 }
@@ -115,12 +121,6 @@
 
     - name: tmux.conf (tmux 3.x version of roles/linux-base/files/tmux)
       ansible.builtin.copy: { src: "{{ playbook_dir }}/wsl/tmux.conf", dest: "{{ home }}/.tmux.conf", owner: "{{ user }}", group: "{{ user }}" }
-      tags: extras
-
-    - name: Windows user name (through WSL interop)
-      ansible.builtin.command: /mnt/c/Windows/System32/cmd.exe /c echo %USERNAME%
-      register: winuser
-      changed_when: false
       tags: extras
 
     - name: ~/docs -> Windows documents

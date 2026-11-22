@@ -47,6 +47,7 @@ Set-Alias -Name g -Value git
 # ---- functions from ~/dotfiles fish (roles/linux-base/files/fish/functions) ----
 foreach ($a in 'gc', 'gl', 'ni', 'gp') { if (Test-Path "Alias:$a") { Remove-Item "Alias:$a" -Force } }
 function cdd { Set-Location "$HOME\dotfiles" }
+function cdw { Set-Location 'C:\work' }          # projects (= /work in Ubuntu)
 # git
 function ga { git add . }
 function gb { git branch @args }

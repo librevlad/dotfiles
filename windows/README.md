@@ -10,6 +10,7 @@ The same habits on Windows (Excel keeps it there): `pwsh -File windows\setup.ps1
 | Windows Terminal: Terminator palette, Fira Code | `terminal/scheme.json` |
 | vim: `roles/linux-base/files/.vim` + Windows fixes | `vim/_vimrc` |
 | Espanso: `:date`, `:time` in any keyboard layout | `espanso/` (work snippets: `match/private.yml`, kept out of git) |
+| Projects: `C:\work` = `/work` in Ubuntu (`cdw` in PowerShell and fish) | `powershell/`, `../wsl.yml` |
 | WSL2: mirrored localhost | `wslconfig`; Ubuntu itself: `../wsl.yml` |
 
 Differences from i3: Win+L is the Windows lock (focus right is also Win+Right), no tabbed layout, Win+Space switches
