@@ -112,7 +112,7 @@ resize = [{'commands': [c], 'bindings': k} for c, k in [
     ('resize --height -10%', ['k', 'up']), ('resize --width +10%', ['l', 'right'])]]
 resize.append({'commands': ['wm-disable-binding-mode --name resize'], 'bindings': ['enter', 'escape']})
 
-no_effects = {'hide_title_bar': {'enabled': False}, 'corner_style': {'enabled': True, 'style': 'square'}}
+no_effects = {'hide_title_bar': {'enabled': False}, 'corner_style': {'enabled': True, 'style': 'rounded'}}  # Windows 11 rounded corners + its shadows
 cfg = {
     'general': {
         'startup_commands': ['shell-exec ' + ZEBAR, 'shell-exec ' + FLOW, f'shell-exec {PYW} {WATCH}'],
@@ -125,7 +125,7 @@ cfg = {
         'show_all_in_taskbar': False,
     },
     'gaps': {'scale_with_dpi': True, 'inner_gap': '20px',          # gaps inner 20
-             'outer_gap': {'top': '52px', 'right': '20px', 'bottom': '20px', 'left': '20px'}},  # top: 20 + the 32px bar
+             'outer_gap': {'top': '20px', 'right': '20px', 'bottom': '52px', 'left': '20px'}},  # bottom: 20 + the 32px bar (i3bar is at the bottom)
     'window_effects': {                                              # border pixel 0
         'focused_window': {'border': {'enabled': False, 'color': '#336699'}, **no_effects,
                            'transparency': {'enabled': False, 'opacity': '95%'}},
@@ -162,6 +162,12 @@ cfg = {
     'binding_modes': [{'name': 'resize', 'keybindings': resize}],
     'keybindings': L,
 }
+class NoAliasDumper(yaml.SafeDumper):
+    """Plain YAML for GlazeWM: no &anchors / *aliases for shared dicts."""
+    def ignore_aliases(self, data):
+        return True
+
+
 head = """# GlazeWM = ~/dotfiles/roles/linux-desktop/files/i3/config on Windows (generated 22.11.2026 by ~/.glzr/glazewm/gen_config.py; edit that and re-run).
 # $mod = Win. Workspaces: 1..0 (Win+digit), L1 L2 (Win+Q/A), R1 R2 (Win+E/D), TV1..TV0 (Win+Alt+digit).
 # Differences from i3: Win+L is the Windows lock and cannot be taken -> focus right is also Win+Right;
@@ -169,7 +175,7 @@ head = """# GlazeWM = ~/dotfiles/roles/linux-desktop/files/i3/config on Windows 
 # Win+Space stays the keyboard layout switch. Reload after edits: Win+Shift+C.
 """
 io.open(OUT, 'w', encoding='utf-8', newline='\n').write(
-    head + yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False, width=200))
+    head + yaml.dump(cfg, Dumper=NoAliasDumper, allow_unicode=True, sort_keys=False, width=200))
 d = yaml.safe_load(io.open(OUT, encoding='utf-8'))
 keys = [b for k in d['keybindings'] for b in k['bindings']]
 print('monitors:', MON)

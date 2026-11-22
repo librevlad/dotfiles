@@ -13,6 +13,8 @@ The same habits on Windows (Excel keeps it there): `pwsh -File windows\setup.ps1
 | Projects: `C:\work` = `/work` in Ubuntu (`cdw` in PowerShell and fish) | `powershell/`, `../wsl.yml` |
 | WSL2: mirrored localhost | `wslconfig`; Ubuntu itself: `../wsl.yml` |
 
+Look: gaps 20, Windows 11 rounded corners with the system window shadows (i3 had square ones).
+
 Differences from i3: Win+L is the Windows lock (focus right is also Win+Right), no tabbed layout, Win+Space switches
 the keyboard layout. Extras not in i3: Win+Shift+V clipboard history (CopyQ); windows go to their workspaces
 (browser 1, VS Code 2, terminal 3, Telegram 5, Explorer 6, Excel/Word 7), and focus follows them.
@@ -29,4 +31,4 @@ plus `--tags extras`: ranger config, `wsl/tmux.conf` (tmux 3.x version), `~/docs
 
 ## Without the taskbar
 
-Settings -> Personalization -> Taskbar -> Taskbar behaviors -> Automatically hide the taskbar. Keep the bar at the top (at the bottom the hidden taskbar pops up over it). Windows by name: PowerToys Command Palette, Win+Alt+Space. In PowerToys turn FancyZones off (it fights GlazeWM); Text Extractor = Win+Shift+T.
+Settings -> Personalization -> Taskbar -> Taskbar behaviors -> Automatically hide the taskbar. The bar sits at the bottom like i3bar (the hidden taskbar shows up over it only when the mouse touches the very edge). Windows by name: PowerToys Command Palette, Win+Alt+Space. In PowerToys turn FancyZones off (it fights GlazeWM); Text Extractor = Win+Shift+T.

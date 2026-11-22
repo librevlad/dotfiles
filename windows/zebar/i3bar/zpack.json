@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "The i3bar from ~/dotfiles + tray icons, volume, Wi-Fi and now playing, for GlazeWM. No weather, no location.",
   "tags": [
-    "topbar",
+    "bottombar",
     "glazewm"
   ],
   "previewImages": [],
@@ -37,7 +37,7 @@
       "presets": [
         {
           "name": "default",
-          "anchor": "top_left",
+          "anchor": "bottom_left",
           "offsetX": "0px",
           "offsetY": "0px",
           "width": "100%",
