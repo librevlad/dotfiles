@@ -11,7 +11,8 @@ if (-not $SkipApps) {
     if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) { Invoke-RestMethod https://get.scoop.sh | Invoke-Expression }
     scoop bucket add extras; scoop bucket add nerd-fonts
     scoop install ripgrep fd fzf bat jq zoxide starship eza less 7zip vim yazi espanso `
-        extras/glazewm extras/zebar extras/flow-launcher extras/copyq extras/altsnap nerd-fonts/JetBrainsMono-NF nerd-fonts/FiraCode-NF
+        extras/glazewm extras/zebar extras/flow-launcher extras/copyq extras/altsnap extras/autohotkey `
+        nerd-fonts/JetBrainsMono-NF nerd-fonts/FiraCode-NF
 }
 
 # PowerShell 7 profile + prompt
@@ -26,6 +27,7 @@ Copy-To "$here\vim\_vimrc" "$HOME\_vimrc"
 Copy-To "$here\glazewm\gen_config.py" "$HOME\.glzr\glazewm\gen_config.py"
 Copy-To "$here\glazewm\monitor_watch.py" "$HOME\.glzr\glazewm\monitor_watch.py"   # L/R workspaces follow the side monitors
 Copy-To "$here\glazewm\quake.py" "$HOME\.glzr\glazewm\quake.py"                   # Win+` drop-down terminal
+Copy-To "$here\glazewm\no-start-menu.ahk" "$HOME\.glzr\glazewm\no-start-menu.ahk" # Win+key bindings must not open Start
 python -m pip install -q pyyaml
 python "$HOME\.glzr\glazewm\gen_config.py"
 Copy-To "$here\zebar\i3bar" "$HOME\.glzr\zebar\i3bar"
@@ -33,6 +35,9 @@ Set-Content -LiteralPath "$HOME\.glzr\zebar\settings.json" -Encoding utf8 -Value
 $ws = New-Object -ComObject WScript.Shell
 $lnk = $ws.CreateShortcut((Join-Path ([Environment]::GetFolderPath('Startup')) 'GlazeWM.lnk'))
 $lnk.TargetPath = "$HOME\scoop\apps\glazewm\current\glazewm.exe"; $lnk.WorkingDirectory = "$HOME\scoop\apps\glazewm\current"; $lnk.Save()
+$lnk = $ws.CreateShortcut((Join-Path ([Environment]::GetFolderPath('Startup')) 'no-start-menu.lnk'))
+$lnk.TargetPath = "$HOME\scoop\apps\autohotkey\current\v2\AutoHotkey64.exe"
+$lnk.Arguments = "`"$HOME\.glzr\glazewm\no-start-menu.ahk`""; $lnk.WorkingDirectory = "$HOME\.glzr\glazewm"; $lnk.Save()
 
 # Espanso (Scoop = portable mode): neutral snippets; work snippets go to match\private.yml (not in git)
 $esp = "$HOME\scoop\persist\espanso\.espanso"

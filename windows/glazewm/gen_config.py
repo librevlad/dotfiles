@@ -102,18 +102,9 @@ kb('shell-exec ' + HOME + r'\scoop\apps\copyq\current\copyq.exe toggle', 'lwin+s
 # not in i3: File Explorer on the current workspace (Win+E is workspace R1, as in i3)
 kb('shell-exec explorer.exe', 'lwin+alt+e')
 
-# i3 "assign" + follow: new windows of these apps go to their workspace and focus follows them (i3 names: 1 browser, 2 ide, 3 term, 5 chat, 6 files)
-ASSIGN = [
-    ('1', [{'window_process': {'regex': '^(chrome|firefox|msedge)$'}}]),
-    ('2', [{'window_process': {'regex': '^(Code|phpstorm64)$'}},
-           # the Claude desktop app's main window: closing it hides it to the tray, and the tray icon brings it back
-           # on whatever workspace is focused, so it seemed to vanish from 2
-           {'window_process': {'equals': 'claude'}, 'window_title': {'equals': 'Claude'}}]),
-    # terminal and Explorer are NOT assigned: they are needed on any workspace (user, 22.11.2026)
-    ('5', [{'window_process': {'equals': 'Telegram'}}]),
-    ('7', [{'window_process': {'equals': 'EXCEL'}, 'window_class': {'equals': 'XLMAIN'}},
-           {'window_process': {'equals': 'WINWORD'}, 'window_class': {'equals': 'OpusApp'}}]),
-]
+# No i3 "assign": no app is tied to a workspace, every window opens on the workspace you are on (user, 22.11.2026:
+# "отвяжи вообще все от жесткой привязки к столам"; the Claude app kept "vanishing" from 2). Workspaces themselves
+# stay bound to their monitors (see ws()).
 
 resize = [{'commands': [c], 'bindings': k} for c, k in [
     ('resize --width -10%', ['h', 'left']), ('resize --height +10%', ['j', 'down']),
@@ -170,8 +161,7 @@ cfg = {
         # the Win+` drop-down terminal (quake.py places it); the title arrives just after creation -> also on title_change
         {'commands': ['set-floating --shown-on-top --centered=false'], 'on': ['manage', 'title_change'],
          'match': [{'window_process': {'equals': 'WindowsTerminal'}, 'window_title': {'equals': 'Quake'}}]},
-    # follow the window: otherwise a taskbar click opens it on a hidden workspace and seems to do nothing
-    ] + [{'commands': [f'move --workspace {ws}', f'focus --workspace {ws}'], 'match': m} for ws, m in ASSIGN],
+    ],
     'binding_modes': [{'name': 'resize', 'keybindings': resize}],
     'keybindings': L,
 }

@@ -18,11 +18,16 @@ The same habits on Windows (Excel keeps it there): `pwsh -File windows\setup.ps1
 Look: gaps 20, Windows 11 rounded corners with the system window shadows (i3 had square ones).
 
 Differences from i3: Win+L is the Windows lock (focus right is also Win+Right), no tabbed layout, Win+Space switches
-the keyboard layout. Extras not in i3: Win+Shift+V clipboard history (CopyQ); windows go to their workspaces
-(browser 1, VS Code and the Claude app 2, Telegram 5, Excel/Word 7), and focus follows them; standard Windows dialogs are left alone (moving them between monitors of different scale cut them off); the terminal and File Explorer open on the
-current workspace. Win+Alt+E = File Explorer (Win+E is workspace R1, as in i3). Win+Shift+Enter = terminal in WSL
+the keyboard layout, no i3 `assign`: every window opens on the workspace you are on (tying apps to workspaces made
+some of them seem to vanish). Extras not in i3: Win+Shift+V clipboard history (CopyQ); standard Windows dialogs are
+left alone (moving them between monitors of different scale cut them off). Win+Alt+E = File Explorer (Win+E is
+workspace R1, as in i3). Win+Shift+Enter = terminal in WSL
 Ubuntu. Win+` = drop-down terminal (i3 scratchpad style, `glazewm/quake.py`): one floating Windows Terminal window
 titled "Quake" at the top of the focused monitor; the key brings it to the current workspace or hides it.
+
+Win never opens Start: GlazeWM swallows the key of its Win+key bindings, so Windows saw a lone Win press and opened
+Start on release (glzr-io/glazewm#1215; always with Win+`). `glazewm/no-start-menu.ahk` (AutoHotkey v2, from
+shell:startup) sends a dummy key the moment Win goes down. Start: Ctrl+Esc; apps: Win+S.
 
 ## WSL
 
