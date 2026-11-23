@@ -27,6 +27,7 @@ Copy-To "$here\vim\_vimrc" "$HOME\_vimrc"
 Copy-To "$here\glazewm\gen_config.py" "$HOME\.glzr\glazewm\gen_config.py"
 Copy-To "$here\glazewm\monitor_watch.py" "$HOME\.glzr\glazewm\monitor_watch.py"   # L/R workspaces follow the side monitors
 Copy-To "$here\glazewm\quake.py" "$HOME\.glzr\glazewm\quake.py"                   # Win+` drop-down terminal
+Copy-To "$here\glazewm\unminimize.py" "$HOME\.glzr\glazewm\unminimize.py"         # Win+- minimized windows back
 Copy-To "$here\glazewm\no-start-menu.ahk" "$HOME\.glzr\glazewm\no-start-menu.ahk" # Win+key bindings must not open Start
 python -m pip install -q pyyaml
 python "$HOME\.glzr\glazewm\gen_config.py"

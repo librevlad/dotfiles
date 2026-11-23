@@ -24,6 +24,9 @@ left alone (moving them between monitors of different scale cut them off). Win+A
 workspace R1, as in i3). Win+Shift+Enter = terminal in WSL
 Ubuntu. Win+` = drop-down terminal (i3 scratchpad style, `glazewm/quake.py`): one floating Windows Terminal window
 titled "Quake" at the top of the focused monitor; the key brings it to the current workspace or hides it.
+Win+- = minimized windows back (i3 "scratchpad show", `glazewm/unminimize.py`): GlazeWM drops a minimized window
+from the layout and there is no taskbar to click, so the key restores the minimized windows of the current
+workspace, or, if there are none, brings the minimized windows of other workspaces here.
 
 Win never opens Start: GlazeWM swallows the key of its Win+key bindings, so Windows saw a lone Win press and opened
 Start on release (glzr-io/glazewm#1215; always with Win+`). `glazewm/no-start-menu.ahk` (AutoHotkey v2, from

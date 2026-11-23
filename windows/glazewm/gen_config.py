@@ -67,6 +67,8 @@ UBUNTU = '{b40bed0d-cfad-5ecf-a53d-e1c7a438aa67}'                      # Windows
 kb('shell-exec wt.exe', 'lwin+enter')                                  # $mod+Return exec terminator
 kb(f'shell-exec wt.exe -p {UBUNTU}', 'lwin+shift+enter')               # not in i3: the same, in WSL Ubuntu
 kb(f'shell-exec {PYW} {QUAKE}', 'lwin+oem_tilde')                          # not in i3: drop-down terminal (scratchpad style)
+UNMIN = os.path.join(HOME, ".glzr", "glazewm", "unminimize.py")        # minimized windows back (no taskbar here)
+kb(f'shell-exec {PYW} {UNMIN}', 'lwin+oem_minus')                         # like i3 $mod+minus scratchpad show
 kb('close', 'lwin+c')                                                  # $mod+c kill
 kb('shell-exec ' + FLOW, 'lwin+s')                                     # $mod+s exec rofi -show run
 kb('shell-exec rundll32.exe user32.dll,LockWorkStation', 'lwin+t')     # $mod+t lock.sh
