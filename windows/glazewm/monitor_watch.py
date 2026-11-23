@@ -31,6 +31,21 @@ def query(kind):
     return json.loads(run(G, "query", kind).stdout)["data"]
 
 
+def monitor_signature():
+    """What matters for workspace placement: the set of monitors and their geometry."""
+    try:
+        return tuple(sorted((m["x"], m["y"], m["width"], m["height"]) for m in query("monitors")["monitors"]))
+    except Exception:
+        return None
+
+
+def focused_workspace():
+    try:
+        return next((w["name"] for m in query("monitors")["monitors"] for w in m["children"] if w.get("hasFocus")), None)
+    except Exception:
+        return None
+
+
 def relocate():
     gen = run(sys.executable, GEN)
     log("gen: " + " | ".join(l for l in gen.stdout.splitlines() if l.startswith("monitors")) + (gen.stderr.strip()[:300]))
@@ -52,7 +67,11 @@ def relocate():
             for _ in range(abs(target - idx)):
                 run(G, "command", "move-workspace", "--direction", direction)
             moved.append(f"{w['name']}: {idx}->{target}")
-    if focused:
+    # Give the focus back only if a move took it away: with toggle_workspace_on_refocus (i3 back_and_forth)
+    # focusing the workspace that already has the focus jumps to the PREVIOUS one. Monitors that sleep send
+    # monitor_updated every ~30 s, and refocusing on each pass flipped the screen between two workspaces
+    # (23.11.2026: 2 <-> 6 for an hour while the user was away).
+    if focused and focused_workspace() != focused:
         run(G, "command", "focus", "--workspace", focused)
     log("moved: " + (", ".join(moved) or "nothing"))
 
@@ -63,13 +82,20 @@ def main():
         return
     time.sleep(3)  # let GlazeWM finish starting
     relocate()
+    last_sig = [monitor_signature()]
     sub = subprocess.Popen([G, "sub", "-e", "monitor_added", "monitor_removed", "monitor_updated"],
                            stdout=subprocess.PIPE, text=True, encoding="utf-8", creationflags=NOWIN)
     timer = None
     quiet_until = [0.0]
 
     def pass_():
+        # monitor_updated also fires without any real change (sleeping monitors: every ~30 s): act only when the
+        # set of monitors or their geometry changed
+        sig = monitor_signature()
+        if sig is not None and sig == last_sig[0]:
+            return
         relocate()
+        last_sig[0] = monitor_signature()
         quiet_until[0] = time.time() + 5  # our own workspace moves must not trigger another pass
 
     for line in sub.stdout:  # one JSON line per event; several arrive together when a monitor is plugged in
